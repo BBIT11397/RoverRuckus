@@ -51,7 +51,6 @@ import org.firstinspires.ftc.teamcode.Hardware;
  */
 
 @TeleOp(name="Pushbot: Teleop POV", group="Pushbot")
-@Disabled
 public class Teleop extends LinearOpMode {
 
     /* Declare OpMode members. */
