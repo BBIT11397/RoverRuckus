@@ -33,6 +33,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
+
 
 /**
  * This is NOT an opmode.
@@ -57,10 +59,14 @@ public class Hardware
     public DcMotor  leftBack  = null;
     public DcMotor  rightFront  = null;
     public DcMotor  rightBack  = null;
+    public DcMotor  liftArm    = null;
+    public DcMotor  latchPin   = null;
 
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
     private ElapsedTime period  = new ElapsedTime();
+
+    DigitalChannel magnetSwitch;  // Hardware Device Object
 
     /* Constructor */
     public Hardware(){
@@ -77,6 +83,11 @@ public class Hardware
         rightFront = hwMap.get(DcMotor.class, "rightFront");
         leftFront  = hwMap.get(DcMotor.class, "leftFront");
         rightBack = hwMap.get(DcMotor.class, "rightBack");
+        liftArm = hwMap.get(DcMotor.class, "liftArm");
+
+        // get a reference to our digitalTouch object.
+        magnetSwitch= hwMap.get(DigitalChannel.class, "magnetSwitch");
+
         leftBack.setDirection(DcMotor.Direction.FORWARD);
         rightFront.setDirection(DcMotor.Direction.REVERSE);
         leftFront.setDirection(DcMotor.Direction.FORWARD);
@@ -94,6 +105,20 @@ public class Hardware
         rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        liftArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        // set the digital channel to input.
+        magnetSwitch.setMode(DigitalChannel.Mode.INPUT);
+
+        liftArm.setPower(.25);
+
+     /*   while (magnetSwitch.getState() == false) {
+            liftArm.isBusy();
+        }
+
+        liftArm.setPower(0);
+
+        liftArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+*/
 
     }
  }
