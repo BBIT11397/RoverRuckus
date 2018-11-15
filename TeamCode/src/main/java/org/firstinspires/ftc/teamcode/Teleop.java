@@ -32,6 +32,8 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.Hardware;
@@ -55,7 +57,10 @@ public class Teleop extends LinearOpMode {
 
     /* Declare OpMode members. */
     Hardware robot           = new Hardware();                 // Use a LilB's hardware
-                                                               // could also use HardwarePushbotMatrix class.
+
+
+
+    // could also use HardwarePushbotMatrix class.
     @Override
     public void runOpMode() {
         double left;
@@ -63,6 +68,18 @@ public class Teleop extends LinearOpMode {
         double drive;
         double turn;
         double max;
+        boolean notClose = true;
+        int topEncoderCount = 1000;
+        int latchEncoderCount = 500;
+
+
+
+        DigitalChannel magnetSwitch;  // Hardware Device Object
+        magnetSwitch = hardwareMap.get(DigitalChannel.class, "magnetSwitch");
+
+        DigitalChannel latchSwitch;  // Hardware Device Object
+        latchSwitch = hardwareMap.get(DigitalChannel.class, "latchSwitch");
+
 
         /* Initialize the hardware variables.
          * The init() method of the hardware class does all the work here
@@ -107,6 +124,52 @@ public class Teleop extends LinearOpMode {
             telemetry.addData("right", "%.2f", right);
             telemetry.update();
 
+            if (gamepad1.dpad_down) {
+                if (magnetSwitch.getState() == notClose) {
+                    robot.liftArm.setPower(.25);
+                } else {
+                    robot.liftArm.setPower(0);
+                }
+            } else {
+                robot.liftArm.setPower(0);
+            }
+
+            if (gamepad1.dpad_up) {
+                if (robot.liftArm.getCurrentPosition() < topEncoderCount) {
+                    robot.liftArm.setPower(-.25);
+                    telemetry.addData("lift arm" , robot.liftArm.getCurrentPosition());
+                    telemetry.update();
+                } else {
+                    robot.liftArm.setPower(0);
+                }
+            } else {
+                robot.liftArm.setPower(0);
+            }
+
+            if (gamepad1.dpad_left) {
+
+                if (robot.latchPin.getCurrentPosition() < latchEncoderCount) {
+                    robot.latchPin.setPower(-.25);
+                } else {
+                    robot.latchPin.setPower(0);
+                }
+            } else {
+                robot.latchPin.setPower(0);
+            }
+
+            if (gamepad1.dpad_right) {
+                if (latchSwitch.getState() == notClose) {
+                    robot.latchPin.setPower(0.25);
+                    telemetry.addData("latch pin" , robot.latchPin.getCurrentPosition());
+                    telemetry.update();
+                } else {
+                    robot.latchPin.setPower(0);
+                }
+            } else {
+                robot.latchPin.setPower(0);
+            }
+
+            telemetry.update();
         }
     }
 }

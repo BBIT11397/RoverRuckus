@@ -67,6 +67,8 @@ public class Hardware
     private ElapsedTime period  = new ElapsedTime();
 
     DigitalChannel magnetSwitch;  // Hardware Device Object
+    DigitalChannel latchSwitch;  // Hardware Device Object
+
 
     /* Constructor */
     public Hardware(){
@@ -84,9 +86,12 @@ public class Hardware
         leftFront  = hwMap.get(DcMotor.class, "leftFront");
         rightBack = hwMap.get(DcMotor.class, "rightBack");
         liftArm = hwMap.get(DcMotor.class, "liftArm");
+        latchPin = hwMap.get(DcMotor.class, "latchPin");
+
 
         // get a reference to our digitalTouch object.
         magnetSwitch= hwMap.get(DigitalChannel.class, "magnetSwitch");
+        latchSwitch= hwMap.get(DigitalChannel.class, "latchSwitch");
 
         leftBack.setDirection(DcMotor.Direction.FORWARD);
         rightFront.setDirection(DcMotor.Direction.REVERSE);
@@ -106,19 +111,31 @@ public class Hardware
         leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         liftArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        latchPin.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         // set the digital channel to input.
         magnetSwitch.setMode(DigitalChannel.Mode.INPUT);
+        latchSwitch.setMode(DigitalChannel.Mode.INPUT);
+
+        latchPin.setPower(.25);
+
+        while (latchSwitch.getState() == true) {
+            latchPin.isBusy();
+        }
+
+        latchPin.setPower(0);
+
+        latchPin.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         liftArm.setPower(.25);
 
-     /*   while (magnetSwitch.getState() == false) {
+        while (magnetSwitch.getState() == true) {
             liftArm.isBusy();
         }
 
         liftArm.setPower(0);
 
         liftArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-*/
 
     }
  }
