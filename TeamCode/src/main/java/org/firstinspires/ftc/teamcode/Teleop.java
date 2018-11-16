@@ -69,8 +69,8 @@ public class Teleop extends LinearOpMode {
         double turn;
         double max;
         boolean notClose = true;
-        int topEncoderCount = 1000;
-        int latchEncoderCount = 500;
+        int topEncoderCount = 80000;
+        int latchEncoderCount = 80000;
 
 
 
@@ -84,10 +84,10 @@ public class Teleop extends LinearOpMode {
         /* Initialize the hardware variables.
          * The init() method of the hardware class does all the work here
          */
-        robot.init(hardwareMap);
+        robot.init(hardwareMap, telemetry);
 
         // Send telemetry message to signify robot waiting;
-        telemetry.addData("Say", "Hello Driver");    //
+        telemetry.addData("Say", "done with init");
         telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
@@ -125,51 +125,62 @@ public class Teleop extends LinearOpMode {
             telemetry.update();
 
             if (gamepad1.dpad_down) {
-                if (magnetSwitch.getState() == notClose) {
-                    robot.liftArm.setPower(.25);
+                robot.liftArm.setPower(1);
+                /* if (magnetSwitch.getState() == notClose) {
+                    robot.liftArm.setPower(1);
                 } else {
                     robot.liftArm.setPower(0);
-                }
-            } else {
+                } */
+            }  else {
                 robot.liftArm.setPower(0);
             }
+
+            robot.liftArm.setPower(0);
 
             if (gamepad1.dpad_up) {
-                if (robot.liftArm.getCurrentPosition() < topEncoderCount) {
-                    robot.liftArm.setPower(-.25);
-                    telemetry.addData("lift arm" , robot.liftArm.getCurrentPosition());
-                    telemetry.update();
+                robot.liftArm.setPower(-1);
+                /*if (robot.liftArm.getCurrentPosition() < topEncoderCount) {
+                    robot.liftArm.setPower(-1);
                 } else {
                     robot.liftArm.setPower(0);
-                }
+                }*/
             } else {
                 robot.liftArm.setPower(0);
             }
+            //robot.liftArm.setPower(0);
 
-            if (gamepad1.dpad_left) {
-
-                if (robot.latchPin.getCurrentPosition() < latchEncoderCount) {
-                    robot.latchPin.setPower(-.25);
+            if (gamepad1.dpad_left)
+                robot.latchPin.setPower(-.9);
+             /*   if (robot.latchPin.getCurrentPosition() < latchEncoderCount) {
+                    robot.latchPin.setPower(-1);
                 } else {
                     robot.latchPin.setPower(0);
-                }
-            } else {
-                robot.latchPin.setPower(0);
-            }
+                }*/
+            // else
+               // robot.latchPin.setPower(0);
 
-            if (gamepad1.dpad_right) {
-                if (latchSwitch.getState() == notClose) {
-                    robot.latchPin.setPower(0.25);
+            //robot.latchPin.setPower(0);
+
+            if (gamepad1.dpad_right)
+                robot.latchPin.setPower(.9);
+                /*if (latchSwitch.getState() == notClose) {
+                    robot.latchPin.setPower(1);
                     telemetry.addData("latch pin" , robot.latchPin.getCurrentPosition());
                     telemetry.update();
                 } else {
                     robot.latchPin.setPower(0);
-                }
-            } else {
-                robot.latchPin.setPower(0);
-            }
+                }*/
+             //else {
+                //robot.latchPin.setPower(0);
 
+            robot.latchPin.setPower(0);
+
+            telemetry.addData("lift arm" , robot.liftArm.getCurrentPosition());
             telemetry.update();
+
+            telemetry.addData("latch pin" , robot.latchPin.getCurrentPosition());
+            telemetry.update();
+
         }
     }
 }

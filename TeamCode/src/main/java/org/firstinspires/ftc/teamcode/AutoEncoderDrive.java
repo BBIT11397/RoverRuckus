@@ -87,7 +87,7 @@ public class AutoEncoderDrive extends LinearOpMode {
          * Initialize the drive system variables.
          * The init() method of the hardware class does all the work here
          */
-        robot.init(hardwareMap);
+        robot.init(hardwareMap, telemetry);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Resetting Encoders");    //
@@ -102,6 +102,10 @@ public class AutoEncoderDrive extends LinearOpMode {
         robot.rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        robot.latchPin.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.liftArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
 
         // Send telemetry message to indicate successful Encoder reset
         telemetry.addData("Path0",  "Starting at %7d :%7d",

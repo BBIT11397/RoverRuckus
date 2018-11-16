@@ -29,11 +29,15 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 
 /**
@@ -62,9 +66,13 @@ public class Hardware
     public DcMotor  liftArm    = null;
     public DcMotor  latchPin   = null;
 
+    public double LIFT_SPEED = 1;
+    public double LATCH_SPEED = 1;
+
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
     private ElapsedTime period  = new ElapsedTime();
+    private Telemetry telemetry;
 
     DigitalChannel magnetSwitch;  // Hardware Device Object
     DigitalChannel latchSwitch;  // Hardware Device Object
@@ -76,9 +84,12 @@ public class Hardware
     }
 
     /* Initialize standard Hardware interfaces */
-    public void init(HardwareMap ahwMap) {
+    public void init(HardwareMap ahwMap, Telemetry telemetry) {
         // Save reference to Hardware map
         hwMap = ahwMap;
+
+        telemetry.addData("hardware init:" , "enter");
+        telemetry.update();
 
         // Define and Initialize Motors
         leftBack  = hwMap.get(DcMotor.class, "leftBack");
@@ -117,26 +128,35 @@ public class Hardware
         magnetSwitch.setMode(DigitalChannel.Mode.INPUT);
         latchSwitch.setMode(DigitalChannel.Mode.INPUT);
 
-        latchPin.setPower(.25);
+        latchPin.setPower(LATCH_SPEED);
 
         while (latchSwitch.getState() == true) {
             latchPin.isBusy();
+            telemetry.addData("hardware init:" , "Reseting latchPin");
+            telemetry.update();
         }
 
         latchPin.setPower(0);
 
         latchPin.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        liftArm.setPower(.25);
+        liftArm.setPower(LIFT_SPEED);
 
         while (magnetSwitch.getState() == true) {
             liftArm.isBusy();
+            telemetry.addData("hardware init:" , "Reseting liftArm");
+            telemetry.update();
         }
 
         liftArm.setPower(0);
 
         liftArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        latchPin.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        liftArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        
+        telemetry.addData("hardware init:" , "exit");
+        telemetry.update();
     }
  }
 
