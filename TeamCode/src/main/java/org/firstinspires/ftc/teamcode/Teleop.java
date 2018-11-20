@@ -68,6 +68,8 @@ public class Teleop extends LinearOpMode {
         double drive;
         double turn;
         double max;
+        double strafeLeft;
+        double strafeRight;
         boolean notClose = true;
         int topEncoderCount = 80000;
         int latchEncoderCount = 80000;
@@ -90,6 +92,11 @@ public class Teleop extends LinearOpMode {
         telemetry.addData("Say", "done with init");
         telemetry.update();
 
+        robot.leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
@@ -101,6 +108,9 @@ public class Teleop extends LinearOpMode {
             // This way it's also easy to just drive straight, or just turn.
             drive = -gamepad1.left_stick_y;
             turn  = -gamepad1.right_stick_x;
+
+            strafeLeft = gamepad1.left_trigger;
+            strafeRight = gamepad1.right_trigger;
 
             // Combine drive and turn for blended motion.
             left  = drive + turn;
@@ -114,11 +124,23 @@ public class Teleop extends LinearOpMode {
                 right /= max;
             }
 
+            if (strafeLeft != 0 || strafeRight !=0) {
+                if (strafeLeft !=0) {
+                    robot.rightBack.setPower(-strafeLeft);
+                    robot.rightFront.setPower(strafeLeft);
+                }
+
+                if (strafeRight !=0) {
+                    robot.leftFront.setPower(strafeRight);
+                    robot.leftBack.setPower(-strafeRight);
+                }
+            } else {
+                robot.leftBack.setPower(left);
+                robot.rightBack.setPower(right);
+                robot.leftFront.setPower(left);
+                robot.rightFront.setPower(right);
+            }
             // Output the safe vales to the motor drives.
-            robot.leftBack.setPower(left);
-            robot.rightBack.setPower(right);
-            robot.leftFront.setPower(left);
-            robot.rightFront.setPower(right);
 
             telemetry.addData("left",  "%.2f", left);
             telemetry.addData("right", "%.2f", right);

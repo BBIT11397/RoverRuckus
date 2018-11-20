@@ -128,7 +128,7 @@ public class Hardware
         magnetSwitch.setMode(DigitalChannel.Mode.INPUT);
         latchSwitch.setMode(DigitalChannel.Mode.INPUT);
 
-        latchPin.setPower(LATCH_SPEED);
+       /* latchPin.setPower(LATCH_SPEED);
 
         while (latchSwitch.getState() == true) {
             latchPin.isBusy();
@@ -137,7 +137,7 @@ public class Hardware
         }
 
         latchPin.setPower(0);
-
+e
         latchPin.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         liftArm.setPower(LIFT_SPEED);
@@ -154,7 +154,7 @@ public class Hardware
 
         latchPin.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         liftArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        
+*/
         telemetry.addData("hardware init:" , "exit");
         telemetry.update();
     }

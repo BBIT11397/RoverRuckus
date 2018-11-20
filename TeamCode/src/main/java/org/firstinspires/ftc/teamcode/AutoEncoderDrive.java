@@ -65,7 +65,6 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
  */
 
 @Autonomous(name="AutoEncoderDrive", group="Pushbot")
-@Disabled
 public class AutoEncoderDrive extends LinearOpMode {
 
     /* Declare OpMode members. */
@@ -100,11 +99,12 @@ public class AutoEncoderDrive extends LinearOpMode {
 
         robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        robot.latchPin.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.liftArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.latchPin.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.liftArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
 
 
         // Send telemetry message to indicate successful Encoder reset
@@ -118,11 +118,29 @@ public class AutoEncoderDrive extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        // Step through each leg of the path,
-        // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        encoderDrive(DRIVE_SPEED, 48, 5.0);
-        encoderDrive(DRIVE_SPEED,  -12,4.0);
-        encoderDrive(DRIVE_SPEED, -24, 4.0);
+        robot.liftArm.setTargetPosition(-20300);
+        robot.liftArm.setPower(1);
+        while (robot.liftArm.isBusy()){
+            idle();
+        }
+        robot.liftArm.setPower(0);
+
+        robot.latchPin.setTargetPosition(-21460);
+        robot.latchPin.setPower(1);
+        while (robot.latchPin.isBusy()) {
+            idle();
+        }
+        robot.latchPin.setPower(0);
+
+        robot.rightBack.setTargetPosition(10000);
+        robot.leftFront.setTargetPosition(10000);
+        robot.rightBack.setPower(1);
+        robot.leftFront.setPower(1);
+        while (robot.leftFront.isBusy() && robot.rightBack.isBusy()){
+            idle();
+        }
+        robot.rightBack.setPower(0);
+        robot.leftFront.setPower(0);
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
