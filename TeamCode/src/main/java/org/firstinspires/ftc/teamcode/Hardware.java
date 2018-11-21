@@ -36,9 +36,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-
 
 /**
  * This is NOT an opmode.
@@ -64,10 +62,19 @@ public class Hardware
     public DcMotor  rightFront  = null;
     public DcMotor  rightBack  = null;
     public DcMotor  liftArm    = null;
-    public DcMotor  latchPin   = null;
 
+    int     newRightFrontTarget;
+    int     moveCounts;
+    int     newRightBackTarget;
+    int     newLeftFrontTarget;
+    int     newLeftBackTarget;
+
+    static final double     COUNTS_PER_MOTOR_REV    = 1120 ;
+    static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
+    static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
+    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+            (WHEEL_DIAMETER_INCHES * 3.1415);
     public double LIFT_SPEED = 1;
-    public double LATCH_SPEED = 1;
 
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
@@ -75,8 +82,6 @@ public class Hardware
     private Telemetry telemetry;
 
     DigitalChannel magnetSwitch;  // Hardware Device Object
-    DigitalChannel latchSwitch;  // Hardware Device Object
-
 
     /* Constructor */
     public Hardware(){
@@ -97,12 +102,9 @@ public class Hardware
         leftFront  = hwMap.get(DcMotor.class, "leftFront");
         rightBack = hwMap.get(DcMotor.class, "rightBack");
         liftArm = hwMap.get(DcMotor.class, "liftArm");
-        latchPin = hwMap.get(DcMotor.class, "latchPin");
-
 
         // get a reference to our digitalTouch object.
         magnetSwitch= hwMap.get(DigitalChannel.class, "magnetSwitch");
-        latchSwitch= hwMap.get(DigitalChannel.class, "latchSwitch");
 
         leftBack.setDirection(DcMotor.Direction.FORWARD);
         rightFront.setDirection(DcMotor.Direction.REVERSE);
@@ -122,24 +124,11 @@ public class Hardware
         leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         liftArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        latchPin.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // set the digital channel to input.
         magnetSwitch.setMode(DigitalChannel.Mode.INPUT);
-        latchSwitch.setMode(DigitalChannel.Mode.INPUT);
 
-       /* latchPin.setPower(LATCH_SPEED);
-
-        while (latchSwitch.getState() == true) {
-            latchPin.isBusy();
-            telemetry.addData("hardware init:" , "Reseting latchPin");
-            telemetry.update();
-        }
-
-        latchPin.setPower(0);
-e
-        latchPin.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
+       /*
         liftArm.setPower(LIFT_SPEED);
 
         while (magnetSwitch.getState() == true) {
@@ -151,12 +140,63 @@ e
         liftArm.setPower(0);
 
         liftArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        latchPin.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         liftArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 */
         telemetry.addData("hardware init:" , "exit");
         telemetry.update();
     }
- }
+
+    public void strafeLeft(double speed , int inches) {
+        // Determine new target position, and pass to motor controller
+        moveCounts = (int)(inches * COUNTS_PER_INCH);
+        newRightFrontTarget = rightFront.getCurrentPosition() + moveCounts;
+        newRightBackTarget = rightBack.getCurrentPosition() + moveCounts;
+        newLeftFrontTarget = leftFront.getCurrentPosition() + moveCounts;
+        newLeftBackTarget = leftBack.getCurrentPosition() + moveCounts;
+
+        // Set Target and Turn On RUN_TO_POSITION
+        rightFront.setTargetPosition(newRightFrontTarget);
+        rightBack.setTargetPosition(newRightBackTarget);
+        leftFront.setTargetPosition(newLeftFrontTarget);
+        leftBack.setTargetPosition(newLeftBackTarget);
+
+        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        //Do strafing left stuff
+        rightBack.setPower(1);
+        rightFront.setPower(-1);
+        leftFront.setPower(1);
+        leftBack.setPower(-1);
+    }
+    public void strafeRight(double speed , int inches) {
+        // Determine new target position, and pass to motor controller
+        moveCounts = (int)(inches * COUNTS_PER_INCH);
+        newLeftFrontTarget = leftFront.getCurrentPosition() + moveCounts;
+        newLeftBackTarget = leftBack.getCurrentPosition() + moveCounts;
+        newRightFrontTarget = rightFront.getCurrentPosition() + moveCounts;
+        newRightBackTarget = rightBack.getCurrentPosition() + moveCounts;
+
+        // Set Target and Turn On RUN_TO_POSITION
+        leftFront.setTargetPosition(newLeftFrontTarget);
+        leftBack.setTargetPosition(newLeftBackTarget);
+        rightFront.setTargetPosition(newRightFrontTarget);
+        rightBack.setTargetPosition(newRightBackTarget);
+
+        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        //Do strafing right stuff
+        leftFront.setPower(-1);
+        leftBack.setPower(1);
+        rightBack.setPower(-1);
+        rightFront.setPower(1);
+    }
+
+
+}
 

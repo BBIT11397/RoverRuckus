@@ -72,16 +72,9 @@ public class Teleop extends LinearOpMode {
         double strafeRight;
         boolean notClose = true;
         int topEncoderCount = 80000;
-        int latchEncoderCount = 80000;
-
-
 
         DigitalChannel magnetSwitch;  // Hardware Device Object
         magnetSwitch = hardwareMap.get(DigitalChannel.class, "magnetSwitch");
-
-        DigitalChannel latchSwitch;  // Hardware Device Object
-        latchSwitch = hardwareMap.get(DigitalChannel.class, "latchSwitch");
-
 
         /* Initialize the hardware variables.
          * The init() method of the hardware class does all the work here
@@ -96,6 +89,7 @@ public class Teleop extends LinearOpMode {
         robot.rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.liftArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -126,13 +120,17 @@ public class Teleop extends LinearOpMode {
 
             if (strafeLeft != 0 || strafeRight !=0) {
                 if (strafeLeft !=0) {
-                    robot.rightBack.setPower(-strafeLeft);
-                    robot.rightFront.setPower(strafeLeft);
+                    robot.rightBack.setPower(strafeLeft);
+                    robot.rightFront.setPower(-strafeLeft);
+                    robot.leftFront.setPower(strafeLeft);
+                    robot.leftBack.setPower(-strafeLeft);
                 }
 
                 if (strafeRight !=0) {
-                    robot.leftFront.setPower(strafeRight);
-                    robot.leftBack.setPower(-strafeRight);
+                    robot.leftFront.setPower(-strafeRight);
+                    robot.leftBack.setPower(strafeRight);
+                    robot.rightBack.setPower(-strafeRight);
+                    robot.rightFront.setPower(strafeRight);
                 }
             } else {
                 robot.leftBack.setPower(left);
@@ -140,7 +138,6 @@ public class Teleop extends LinearOpMode {
                 robot.leftFront.setPower(left);
                 robot.rightFront.setPower(right);
             }
-            // Output the safe vales to the motor drives.
 
             telemetry.addData("left",  "%.2f", left);
             telemetry.addData("right", "%.2f", right);
@@ -157,8 +154,6 @@ public class Teleop extends LinearOpMode {
                 robot.liftArm.setPower(0);
             }
 
-            robot.liftArm.setPower(0);
-
             if (gamepad1.dpad_up) {
                 robot.liftArm.setPower(-1);
                 /*if (robot.liftArm.getCurrentPosition() < topEncoderCount) {
@@ -169,40 +164,9 @@ public class Teleop extends LinearOpMode {
             } else {
                 robot.liftArm.setPower(0);
             }
-            //robot.liftArm.setPower(0);
-
-            if (gamepad1.dpad_left)
-                robot.latchPin.setPower(-.9);
-             /*   if (robot.latchPin.getCurrentPosition() < latchEncoderCount) {
-                    robot.latchPin.setPower(-1);
-                } else {
-                    robot.latchPin.setPower(0);
-                }*/
-            // else
-               // robot.latchPin.setPower(0);
-
-            //robot.latchPin.setPower(0);
-
-            if (gamepad1.dpad_right)
-                robot.latchPin.setPower(.9);
-                /*if (latchSwitch.getState() == notClose) {
-                    robot.latchPin.setPower(1);
-                    telemetry.addData("latch pin" , robot.latchPin.getCurrentPosition());
-                    telemetry.update();
-                } else {
-                    robot.latchPin.setPower(0);
-                }*/
-             //else {
-                //robot.latchPin.setPower(0);
-
-            robot.latchPin.setPower(0);
 
             telemetry.addData("lift arm" , robot.liftArm.getCurrentPosition());
             telemetry.update();
-
-            telemetry.addData("latch pin" , robot.latchPin.getCurrentPosition());
-            telemetry.update();
-
         }
     }
 }

@@ -102,7 +102,6 @@ public class AutoEncoderDrive extends LinearOpMode {
         robot.leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        robot.latchPin.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.liftArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 
@@ -125,12 +124,6 @@ public class AutoEncoderDrive extends LinearOpMode {
         }
         robot.liftArm.setPower(0);
 
-        robot.latchPin.setTargetPosition(-21460);
-        robot.latchPin.setPower(1);
-        while (robot.latchPin.isBusy()) {
-            idle();
-        }
-        robot.latchPin.setPower(0);
 
         robot.rightBack.setTargetPosition(10000);
         robot.leftFront.setTargetPosition(10000);
