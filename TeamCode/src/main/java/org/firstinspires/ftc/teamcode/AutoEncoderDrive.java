@@ -117,18 +117,16 @@ public class AutoEncoderDrive extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        robot.liftArm.setTargetPosition(-20300);
+        robot.liftArm.setTargetPosition(-22300);
         robot.liftArm.setPower(1);
         while (robot.liftArm.isBusy()){
             idle();
         }
         robot.liftArm.setPower(0);
 
+        robot.strafeLeft(1, 3);
+        robot.driveBackward(1,4);
 
-        robot.rightBack.setTargetPosition(10000);
-        robot.leftFront.setTargetPosition(10000);
-        robot.rightBack.setPower(1);
-        robot.leftFront.setPower(1);
         while (robot.leftFront.isBusy() && robot.rightBack.isBusy()){
             idle();
         }

@@ -73,9 +73,6 @@ public class Teleop extends LinearOpMode {
         boolean notClose = true;
         int topEncoderCount = 80000;
 
-        DigitalChannel magnetSwitch;  // Hardware Device Object
-        magnetSwitch = hardwareMap.get(DigitalChannel.class, "magnetSwitch");
-
         /* Initialize the hardware variables.
          * The init() method of the hardware class does all the work here
          */
@@ -139,10 +136,10 @@ public class Teleop extends LinearOpMode {
                 robot.rightFront.setPower(right);
             }
 
-            telemetry.addData("left",  "%.2f", left);
+          /*  telemetry.addData("left",  "%.2f", left);
             telemetry.addData("right", "%.2f", right);
             telemetry.update();
-
+*/
             if (gamepad1.dpad_down) {
                 robot.liftArm.setPower(1);
                 /* if (magnetSwitch.getState() == notClose) {
@@ -165,8 +162,17 @@ public class Teleop extends LinearOpMode {
                 robot.liftArm.setPower(0);
             }
 
-            telemetry.addData("lift arm" , robot.liftArm.getCurrentPosition());
-            telemetry.update();
+           // telemetry.addData("lift arm" , robot.liftArm.getCurrentPosition());
+           //telemetry.update();
+
+            telemetry.addLine()
+                    .addData("red", robot.colorSensor.red());
+            telemetry.addLine()
+                    .addData("blue", robot.colorSensor.blue());
+            telemetry.addLine()
+                    .addData("green", robot.colorSensor.green());
+            telemetry.addLine()
+                    .addData("hue", robot.colorSensor.argb());
         }
     }
 }
