@@ -145,6 +145,7 @@ public class Hardware
         telemetry.update();
     }
 
+
     public void strafeLeft(double speed , int inches) {
         // Determine new target position, and pass to motor controller
         moveCounts = (int)(inches * COUNTS_PER_INCH);
@@ -247,6 +248,56 @@ public class Hardware
         rightFront.setPower(-speed);
     }
 
+    public void turnRight(double speed , int inches) {
+        // Determine new target position, and pass to motor controller
+        moveCounts = (int)(inches * COUNTS_PER_INCH);
+        newLeftFrontTarget = leftFront.getCurrentPosition() + moveCounts;
+        newLeftBackTarget = leftBack.getCurrentPosition() + moveCounts;
+        newRightFrontTarget = rightFront.getCurrentPosition() + moveCounts;
+        newRightBackTarget = rightBack.getCurrentPosition() + moveCounts;
 
+        // Set Target and Turn On RUN_TO_POSITION
+        leftFront.setTargetPosition(newLeftFrontTarget);
+        leftBack.setTargetPosition(newLeftBackTarget);
+        rightFront.setTargetPosition(newRightFrontTarget);
+        rightBack.setTargetPosition(newRightBackTarget);
+
+        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        //Do strafing right stuff
+        leftFront.setPower(-speed);
+        leftBack.setPower(-speed);
+        rightBack.setPower(speed);
+        rightFront.setPower(speed);
+    }
+
+    public void turnLeft (double speed , int inches) {
+        // Determine new target position, and pass to motor controller
+        moveCounts = (int)(inches * COUNTS_PER_INCH);
+        newLeftFrontTarget = leftFront.getCurrentPosition() + moveCounts;
+        newLeftBackTarget = leftBack.getCurrentPosition() + moveCounts;
+        newRightFrontTarget = rightFront.getCurrentPosition() + moveCounts;
+        newRightBackTarget = rightBack.getCurrentPosition() + moveCounts;
+
+        // Set Target and Turn On RUN_TO_POSITION
+        leftFront.setTargetPosition(newLeftFrontTarget);
+        leftBack.setTargetPosition(newLeftBackTarget);
+        rightFront.setTargetPosition(newRightFrontTarget);
+        rightBack.setTargetPosition(newRightBackTarget);
+
+        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        //Do strafing right stuff
+        leftFront.setPower(speed);
+        leftBack.setPower(speed);
+        rightBack.setPower(-speed);
+        rightFront.setPower(-speed);
+    }
 }
 
