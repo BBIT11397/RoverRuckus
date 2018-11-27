@@ -92,7 +92,7 @@ public class Hardware
     }
 
     /* Initialize standard Hardware interfaces */
-    public void init(HardwareMap ahwMap, Telemetry telemetry) {
+    public void init (HardwareMap ahwMap, Telemetry telemetry) {
         // Save reference to Hardware map
         hwMap = ahwMap;
 
@@ -107,7 +107,7 @@ public class Hardware
         liftArm = hwMap.get(DcMotor.class, "liftArm");
 
         // get a reference to our digitalTouch object.
-        touchSensor = hwMap.get(TouchSensor.class, "touchSensor");
+        //touchSensor = hwMap.get(TouchSensor.class, "touchSensor");
         colorSensor = hwMap.get(ColorSensor.class, "colorSensor");
 
         leftBack.setDirection(DcMotor.Direction.FORWARD);
@@ -129,7 +129,7 @@ public class Hardware
         rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         liftArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        liftArm.setPower(LIFT_SPEED);
+        //liftArm.setPower(LIFT_SPEED);
 
        /* while (! touchSensor.isPressed()) {
             telemetry.addData("hardware init:" , "Reseting liftArm");

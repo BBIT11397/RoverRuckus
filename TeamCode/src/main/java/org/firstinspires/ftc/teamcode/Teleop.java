@@ -52,13 +52,11 @@ import org.firstinspires.ftc.teamcode.Hardware;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Pushbot: Teleop POV", group="Pushbot")
+@TeleOp(name="Teleop", group="Pushbot")
 public class Teleop extends LinearOpMode {
 
     /* Declare OpMode members. */
-    Hardware robot           = new Hardware();                 // Use a LilB's hardware
-
-
+    Hardware robot           = new Hardware();                 // Use a OurRobot's hardware
 
     // could also use HardwarePushbotMatrix class.
     @Override
@@ -88,15 +86,9 @@ public class Teleop extends LinearOpMode {
         robot.rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.liftArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-
-            // Run wheels in POV mode (note: The joystick goes negative when pushed forwards, so negate it)
-            // In this mode the Left stick moves the robot fwd and back, the Right stick turns left and right.
-            // This way it's also easy to just drive straight, or just turn.
             drive = -gamepad1.left_stick_y;
             turn  = -gamepad1.right_stick_x;
 
@@ -140,30 +132,20 @@ public class Teleop extends LinearOpMode {
             telemetry.addData("right", "%.2f", right);
             telemetry.update();
 */
-            if (gamepad1.dpad_down) {
-                robot.liftArm.setPower(1);
-                /* if (magnetSwitch.getState() == notClose) {
-                    robot.liftArm.setPower(1);
-                } else {
-                    robot.liftArm.setPower(0);
-                } */
-            }  else {
-                robot.liftArm.setPower(0);
-            }
+          if (gamepad1.dpad_down || gamepad1.dpad_up) {
+              if (gamepad1.dpad_down) {
+                  robot.liftArm.setPower(1);
+              }
 
-            if (gamepad1.dpad_up) {
-                robot.liftArm.setPower(-1);
-                /*if (robot.liftArm.getCurrentPosition() < topEncoderCount) {
-                    robot.liftArm.setPower(-1);
-                } else {
-                    robot.liftArm.setPower(0);
-                }*/
-            } else {
-                robot.liftArm.setPower(0);
-            }
+              if (gamepad1.dpad_up) {
+                  robot.liftArm.setPower(-1);
+              }
+          } else {
+              robot.liftArm.setPower(0);
+          }
 
-           // telemetry.addData("lift arm" , robot.liftArm.getCurrentPosition());
-           //telemetry.update();
+           telemetry.addData("lift arm" , robot.liftArm.getCurrentPosition());
+           telemetry.update();
 
             telemetry.addLine()
                     .addData("red", robot.colorSensor.red());
@@ -173,6 +155,7 @@ public class Teleop extends LinearOpMode {
                     .addData("green", robot.colorSensor.green());
             telemetry.addLine()
                     .addData("hue", robot.colorSensor.argb());
+            telemetry.update();
         }
     }
 }
