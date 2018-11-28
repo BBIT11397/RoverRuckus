@@ -144,9 +144,6 @@ public class Teleop extends LinearOpMode {
               robot.liftArm.setPower(0);
           }
 
-           telemetry.addData("lift arm" , robot.liftArm.getCurrentPosition());
-           telemetry.update();
-
             telemetry.addLine()
                     .addData("red", robot.colorSensor.red());
             telemetry.addLine()
@@ -155,6 +152,8 @@ public class Teleop extends LinearOpMode {
                     .addData("green", robot.colorSensor.green());
             telemetry.addLine()
                     .addData("hue", robot.colorSensor.argb());
+            telemetry.addLine()
+                    .addData("lift arm" , robot.liftArm.getCurrentPosition());
             telemetry.update();
         }
     }

@@ -78,6 +78,7 @@ public class AutoEncoderDrive extends LinearOpMode {
                                                       (WHEEL_DIAMETER_INCHES * 3.1415);
     static final double     DRIVE_SPEED             = 0.6;
     static final double     TURN_SPEED              = 0.5;
+    static final double     STRAIGHT_OUT            = 0.25;
 
     @Override
     public void runOpMode() {
@@ -99,9 +100,16 @@ public class AutoEncoderDrive extends LinearOpMode {
 
         robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        robot.leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+        robot.liftArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.liftArm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.liftArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 
@@ -117,21 +125,27 @@ public class AutoEncoderDrive extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        robot.liftArm.setTargetPosition(-22300);
+       robot.liftArm.setTargetPosition(-1087);
         robot.liftArm.setPower(1);
         while (robot.liftArm.isBusy()){
             idle();
+            telemetry.addLine()
+                    .addData("lift arm" , robot.liftArm.getCurrentPosition());
+            telemetry.update();
         }
         robot.liftArm.setPower(0);
 
         robot.strafeLeft(1, 3);
-        robot.driveBackward(1,4);
+        robot.allMotorsStop();
+        robot.driveBackward(1,25);
+        robot.allMotorsStop();
 
-        while (robot.leftFront.isBusy() && robot.rightBack.isBusy()){
-            idle();
+
+        while (opModeIsActive()) {
+             robot.firstJewel();
+            sleep(750);
         }
-        robot.rightBack.setPower(0);
-        robot.leftFront.setPower(0);
+
 
         telemetry.addData("Path", "Complete");
         telemetry.update();

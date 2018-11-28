@@ -59,11 +59,12 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class Hardware
 {
     /* Public OpMode members. */
-    public DcMotor  leftFront   = null;
-    public DcMotor  leftBack  = null;
-    public DcMotor  rightFront  = null;
+    public DcMotor  leftFront  = null;
+    public DcMotor  leftBack   = null;
+    public DcMotor  rightFront = null;
     public DcMotor  rightBack  = null;
     public DcMotor  liftArm    = null;
+    public Servo    sampleArm  = null;
 
     int     newRightFrontTarget;
     int     moveCounts;
@@ -77,6 +78,9 @@ public class Hardware
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
     public double LIFT_SPEED = 1;
+    static final double     STRAIGHT_OUT            = 0.7;
+    static final double     ACUTE_ANGLE             = 0.9;
+
 
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
@@ -109,6 +113,8 @@ public class Hardware
         // get a reference to our digitalTouch object.
         //touchSensor = hwMap.get(TouchSensor.class, "touchSensor");
         colorSensor = hwMap.get(ColorSensor.class, "colorSensor");
+
+        sampleArm = hwMap.get(Servo.class, "sampleArm");
 
         leftBack.setDirection(DcMotor.Direction.FORWARD);
         rightFront.setDirection(DcMotor.Direction.REVERSE);
@@ -298,6 +304,17 @@ public class Hardware
         leftBack.setPower(speed);
         rightBack.setPower(-speed);
         rightFront.setPower(-speed);
+    }
+
+    public void allMotorsStop (){
+        leftFront.setPower(0);
+        leftBack.setPower(0);
+        rightBack.setPower(0);
+        rightFront.setPower(0);
+    }
+
+    public void firstJewel(){
+        sampleArm.setPosition(ACUTE_ANGLE);
     }
 }
 
