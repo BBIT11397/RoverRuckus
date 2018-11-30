@@ -52,7 +52,7 @@ import org.firstinspires.ftc.teamcode.Hardware;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Teleop", group="Pushbot")
+@TeleOp(name="Teleop", group="OurRobot")
 public class Teleop extends LinearOpMode {
 
     /* Declare OpMode members. */

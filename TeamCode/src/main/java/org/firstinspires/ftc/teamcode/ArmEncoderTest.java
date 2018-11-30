@@ -29,64 +29,62 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
 
-@TeleOp(name="Drive Motor Test", group="ourRobot")
-@Disabled
-public class DriveMotorTest extends LinearOpMode {
+@TeleOp(name="ArmEncoderTest", group="OurRobot")
+public class ArmEncoderTest extends LinearOpMode {
 
-    public DcMotor  leftFront   = null;
-    public DcMotor  leftBack  = null;
-    public DcMotor  rightFront  = null;
-    public DcMotor  rightBack  = null;
+    /* Declare OpMode members. */
+    Hardware robot           = new Hardware();                 // Use a OurRobot's hardware
 
     @Override
     public void runOpMode() {
 
-        leftBack  = hardwareMap.get(DcMotor.class, "leftBack");
-        rightFront = hardwareMap.get(DcMotor.class, "rightFront");
-        leftFront  = hardwareMap.get(DcMotor.class, "leftFront");
-        rightBack = hardwareMap.get(DcMotor.class, "rightBack");
+        robot.init(hardwareMap, telemetry);
 
-        leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        telemetry.addData("Say", "done with 'init'");
+        telemetry.addData("Say", "done with init");
         telemetry.update();
 
         waitForStart();
 
         while (opModeIsActive()) {
 
-            if (gamepad1.a) {
-                leftFront.setPower(-1);
-            } else {
-                leftFront.setPower(0);
-            }
+          if (gamepad1.dpad_down || gamepad1.dpad_up) {
+              telemetry.addLine()
+                      .addData("Manual" , robot.liftArm.getCurrentPosition());
+              telemetry.update();
+              if (gamepad1.dpad_down) {
+                  robot.liftArm.setPower(1);
+              }
 
-            if (gamepad1.b) {
-                leftBack.setPower(-1);
-            } else {
-                leftBack.setPower(0);
-            }
+              if (gamepad1.dpad_up) {
+                  robot.liftArm.setPower(-1);
+              }
+          } else {
+              robot.liftArm.setPower(0);
+          }
 
-            if (gamepad1.x) {
-                rightFront.setPower(-1);
-            } else {
-                rightFront.setPower(0);
-            }
+          if(gamepad1.a || gamepad1.y){
+              if (gamepad1.y){
+                  robot.liftArm.setTargetPosition(-1087);
+                  robot.liftArm.setPower(1);
+                  while (robot.liftArm.isBusy()){
+                      idle();
+                      telemetry.addLine()
+                              .addData("Auto" , robot.liftArm.getCurrentPosition());
+                      telemetry.update();
+                  }
+                  robot.liftArm.setPower(0);
+              }
+              if(gamepad1.a){
+                  robot.liftArm.setPower(1);
+              }
+          }
 
-            if (gamepad1.y) {
-                rightBack.setPower(-1);
-            } else {
-                rightBack.setPower(0);
-            }
+          telemetry.addLine()
+                  .addData("all" , robot.liftArm.getCurrentPosition());
+          telemetry.update();
         }
     }
 }

@@ -64,7 +64,7 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="AutoEncoderDrive", group="Pushbot")
+@Autonomous(name="AutoEncoderDrive", group="OurRobot")
 public class AutoEncoderDrive extends LinearOpMode {
 
     /* Declare OpMode members. */
@@ -125,7 +125,7 @@ public class AutoEncoderDrive extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-       robot.liftArm.setTargetPosition(-1087);
+        robot.liftArm.setTargetPosition(-1087);
         robot.liftArm.setPower(1);
         while (robot.liftArm.isBusy()){
             idle();
