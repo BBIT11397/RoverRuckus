@@ -56,7 +56,7 @@ import org.firstinspires.ftc.teamcode.Hardware;
 public class Teleop extends LinearOpMode {
 
     /* Declare OpMode members. */
-    Hardware robot           = new Hardware();                 // Use a OurRobot's hardware
+    Hardware robot = new Hardware();                 // Use a OurRobot's hardware
 
     // could also use HardwarePushbotMatrix class.
     @Override
@@ -86,38 +86,35 @@ public class Teleop extends LinearOpMode {
         robot.rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.liftArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        robot.liftArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
         waitForStart();
 
         while (opModeIsActive()) {
             drive = -gamepad1.left_stick_y;
-            turn  = -gamepad1.right_stick_x;
+            turn = -gamepad1.right_stick_x;
 
             strafeLeft = gamepad1.left_trigger;
             strafeRight = gamepad1.right_trigger;
 
             // Combine drive and turn for blended motion.
-            left  = drive + turn;
+            left = drive + turn;
             right = drive - turn;
 
             // Normalize the values so neither exceed +/- 1.0
             max = Math.max(Math.abs(left), Math.abs(right));
-            if (max > 1.0)
-            {
+            if (max > 1.0) {
                 left /= max;
                 right /= max;
             }
 
-            if (strafeLeft != 0 || strafeRight !=0) {
-                if (strafeLeft !=0) {
+            if (strafeLeft != 0 || strafeRight != 0) {
+                if (strafeLeft != 0) {
                     robot.rightBack.setPower(strafeLeft);
                     robot.rightFront.setPower(-strafeLeft);
                     robot.leftFront.setPower(strafeLeft);
                     robot.leftBack.setPower(-strafeLeft);
                 }
 
-                if (strafeRight !=0) {
+                if (strafeRight != 0) {
                     robot.leftFront.setPower(-strafeRight);
                     robot.leftBack.setPower(strafeRight);
                     robot.rightBack.setPower(-strafeRight);
@@ -134,29 +131,32 @@ public class Teleop extends LinearOpMode {
             telemetry.addData("right", "%.2f", right);
             telemetry.update();
 */
-          if (gamepad1.dpad_down || gamepad1.dpad_up) {
-              if (gamepad1.dpad_down) {
-                  robot.liftArm.setPower(1);
-              }
+            if (gamepad1.dpad_down || gamepad1.dpad_up) {
+                telemetry.addLine()
+                        .addData("Manual" , robot.liftArm.getCurrentPosition());
+                telemetry.update();
+                if (gamepad1.dpad_down) {
+                    robot.liftArm.setPower(1);
+                }
 
-              if (gamepad1.dpad_up) {
-                  robot.liftArm.setPower(-1);
-              }
-          } else {
-              robot.liftArm.setPower(0);
-          }
+                if (gamepad1.dpad_up) {
+                    robot.liftArm.setPower(-1);
+                }
+            } else {
+                robot.liftArm.setPower(0);
+            }
 
             telemetry.addLine()
-                    .addData("red", robot.colorSensor.red());
-            telemetry.addLine()
-                    .addData("blue", robot.colorSensor.blue());
-            telemetry.addLine()
-                    .addData("green", robot.colorSensor.green());
-            telemetry.addLine()
-                    .addData("hue", robot.colorSensor.argb());
-            telemetry.addLine()
-                    .addData("lift arm" , robot.liftArm.getCurrentPosition());
-            telemetry.update();
+                        .addData("red", robot.colorSensor.red());
+                telemetry.addLine()
+                        .addData("blue", robot.colorSensor.blue());
+                telemetry.addLine()
+                        .addData("green", robot.colorSensor.green());
+                telemetry.addLine()
+                        .addData("hue", robot.colorSensor.argb());
+                telemetry.addLine()
+                        .addData("lift arm", robot.liftArm.getCurrentPosition());
+                telemetry.update();
+            }
         }
     }
-}
