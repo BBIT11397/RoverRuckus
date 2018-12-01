@@ -126,6 +126,7 @@ public class Hardware
         rightFront.setPower(0);
         leftFront.setPower(0);
         rightBack.setPower(0);
+        liftArm.setPower(0);
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
@@ -134,15 +135,6 @@ public class Hardware
         leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         liftArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        //liftArm.setPower(LIFT_SPEED);
-
-       /* while (! touchSensor.isPressed()) {
-            telemetry.addData("hardware init:" , "Reseting liftArm");
-            telemetry.update();
-        }
-*/
-        liftArm.setPower(0);
 
         liftArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -153,6 +145,21 @@ public class Hardware
 
 
     public void strafeLeft(double speed , int inches) {
+        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
         // Determine new target position, and pass to motor controller
         moveCounts = (int)(inches * COUNTS_PER_INCH);
         newRightFrontTarget = rightFront.getCurrentPosition() + moveCounts;
@@ -165,11 +172,6 @@ public class Hardware
         rightBack.setTargetPosition(newRightBackTarget);
         leftFront.setTargetPosition(newLeftFrontTarget);
         leftBack.setTargetPosition(newLeftBackTarget);
-
-        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         //Do strafing left stuff
         rightBack.setPower(speed);
@@ -315,6 +317,13 @@ public class Hardware
 
     public void firstJewel(){
         sampleArm.setPosition(ACUTE_ANGLE);
+    }
+
+    public boolean checkMotorIsBusy (){
+        if (leftFront.isBusy() || leftBack.isBusy() || rightBack.isBusy() || rightFront.isBusy()){
+            return true;
+        }
+        return false;
     }
 }
 

@@ -81,10 +81,6 @@ public class ArmEncoderTest extends LinearOpMode {
                   robot.liftArm.setPower(1);
               }
           }
-
-          telemetry.addLine()
-                  .addData("all" , robot.liftArm.getCurrentPosition());
-          telemetry.update();
         }
     }
 }
