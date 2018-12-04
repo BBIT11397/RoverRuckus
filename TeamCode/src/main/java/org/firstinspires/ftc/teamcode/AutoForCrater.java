@@ -77,6 +77,8 @@ public class AutoForCrater extends LinearOpMode {
     static final double TURN_SPEED = 0.5;
     static final double STRAIGHT_OUT = 0.25;
     public double LIFT_SPEED = 1;
+    public final double newColorPosition = robot.sampleArm.getPosition() + 0.05;
+
 
     //strafeLeft Function
     int     newRightFrontTarget;
@@ -160,17 +162,17 @@ public class AutoForCrater extends LinearOpMode {
         robot.leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         // Determine new target position, and pass to motor controller
-        moveCounts = (int)(15 * COUNTS_PER_INCH);
+        /*moveCounts = (int)(12 * COUNTS_PER_INCH);
         newRightFrontTarget = (robot.rightFront.getCurrentPosition() - moveCounts);
         newRightBackTarget = (robot.rightBack.getCurrentPosition() + moveCounts);
         newLeftFrontTarget = (robot.leftFront.getCurrentPosition() + moveCounts);
         newLeftBackTarget = (robot.leftBack.getCurrentPosition() - moveCounts);
-
+*/
         // Set Target and Turn On RUN_TO_POSITION
-        robot.rightFront.setTargetPosition(newRightFrontTarget);
-        robot.rightBack.setTargetPosition(newRightBackTarget);
-        robot.leftFront.setTargetPosition(newLeftFrontTarget);
-        robot.leftBack.setTargetPosition(newLeftBackTarget);
+        robot.rightFront.setTargetPosition(-1069);
+        robot.rightBack.setTargetPosition(1069);
+        robot.leftFront.setTargetPosition(1069);
+        robot.leftBack.setTargetPosition(-1069);
 
         //Do strafing left stuff
         robot.rightBack.setPower(1);
@@ -180,25 +182,10 @@ public class AutoForCrater extends LinearOpMode {
 
         while (robot.checkMotorIsBusy() && opModeIsActive()){
             telemetry.addLine()
-                    .addData("T leftFront", robot.leftFront.getTargetPosition());
-            telemetry.addLine()
-                    .addData("C leftFront", robot.leftFront.getCurrentPosition());
-            telemetry.addLine()
-                    .addData("T leftBack", robot.leftBack.getTargetPosition());
-            telemetry.addLine()
-                    .addData("C leftBack", robot.leftBack.getCurrentPosition());
-            telemetry.addLine()
-                    .addData("T rightFront", robot.rightFront.getTargetPosition());
-            telemetry.addLine()
-                    .addData("C rightFront", robot.rightFront.getCurrentPosition());
-            telemetry.addLine()
-                    .addData("T rightBack", robot.rightBack.getTargetPosition());
-            telemetry.addLine()
-                    .addData("C rightBack", robot.rightBack.getCurrentPosition());
-            telemetry.update();
+                    .addData("Task", "Unhook");;
             idle();
         }
-        sleep(500);
+        sleep(250);
         robot.allMotorsStop();
 
         robot.rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -217,17 +204,17 @@ public class AutoForCrater extends LinearOpMode {
         robot.leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         // Determine new target position, and pass to motor controller
-        moveCounts = (int)(40 * COUNTS_PER_INCH);
+        /*moveCounts = (int)(40 * COUNTS_PER_INCH);
         newLeftFrontTarget = robot.leftFront.getCurrentPosition() + moveCounts;
         newLeftBackTarget = robot.leftBack.getCurrentPosition() + moveCounts;
         newRightFrontTarget =robot. rightFront.getCurrentPosition() + moveCounts;
         newRightBackTarget = robot.rightBack.getCurrentPosition() + moveCounts;
-
+*/
         // Set Target and Turn On RUN_TO_POSITION
-        robot.leftFront.setTargetPosition(newLeftFrontTarget);
-        robot.leftBack.setTargetPosition(newLeftBackTarget);
-        robot.rightFront.setTargetPosition(newRightFrontTarget);
-        robot.rightBack.setTargetPosition(newRightBackTarget);
+        robot.leftBack.setTargetPosition(2560);
+        robot.leftFront.setTargetPosition(2560);
+        robot.rightFront.setTargetPosition(2560);
+        robot.rightBack.setTargetPosition(2560);
 
         //Do strafing right stuff
         robot.leftFront.setPower(1);
@@ -237,27 +224,26 @@ public class AutoForCrater extends LinearOpMode {
 
         while (robot.checkMotorIsBusy() && opModeIsActive()){
             telemetry.addLine()
-                    .addData("T leftFront", robot.leftFront.getTargetPosition());
-            telemetry.addLine()
-                    .addData("C leftFront", robot.leftFront.getCurrentPosition());
-            telemetry.addLine()
-                    .addData("T leftBack", robot.leftBack.getTargetPosition());
-            telemetry.addLine()
-                    .addData("C leftBack", robot.leftBack.getCurrentPosition());
-            telemetry.addLine()
-                    .addData("T rightFront", robot.rightFront.getTargetPosition());
-            telemetry.addLine()
-                    .addData("C rightFront", robot.rightFront.getCurrentPosition());
-            telemetry.addLine()
-                    .addData("T rightBack", robot.rightBack.getTargetPosition());
-            telemetry.addLine()
-                    .addData("C rightBack", robot.rightBack.getCurrentPosition());
+                    .addData("Task", "drive to minerals");
             telemetry.update();
             idle();
         }
-        sleep(500);
+        sleep(250);
 
         robot.allMotorsStop();
+
+        robot.sampleArm.setPosition(.25);
+
+        while(robot.colorSensor.alpha() <16) {
+            robot.sampleArm.setPosition(newColorPosition);
+            sleep(100);
+            if (robot.colorSensor.alpha() >16) {
+                robot.sampleArm.setPosition(newColorPosition);
+                sleep(100);
+                continue;
+            }
+        }
+
 
         //strafeRight Function
         robot.rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -276,17 +262,22 @@ public class AutoForCrater extends LinearOpMode {
         robot.leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         // Determine new target position, and pass to motor controller
-        moveCounts = (int)(15 * COUNTS_PER_INCH);
+        /*moveCounts = (int)(15 * COUNTS_PER_INCH);
         newRightFrontTarget = (robot.rightFront.getCurrentPosition() + moveCounts);
         newRightBackTarget = (robot.rightBack.getCurrentPosition() - moveCounts);
         newLeftFrontTarget = (robot.leftFront.getCurrentPosition() - moveCounts);
         newLeftBackTarget = (robot.leftBack.getCurrentPosition() + moveCounts);
 
+
+
+
+
+
         // Set Target and Turn On RUN_TO_POSITION
-        robot.rightFront.setTargetPosition(newRightFrontTarget);
-        robot.rightBack.setTargetPosition(newRightBackTarget);
-        robot.leftFront.setTargetPosition(newLeftFrontTarget);
-        robot.leftBack.setTargetPosition(newLeftBackTarget);
+        robot.rightFront.setTargetPosition(1335);
+        robot.rightBack.setTargetPosition(-1335);
+        robot.leftFront.setTargetPosition(-1335);
+        robot.leftBack.setTargetPosition(1335);
 
         //Do strafing left stuff
         robot.rightBack.setPower(1);
@@ -314,7 +305,7 @@ public class AutoForCrater extends LinearOpMode {
             telemetry.update();
             idle();
         }
-        sleep(500);
+        sleep(250);
         robot.allMotorsStop();
 
         robot.rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -340,10 +331,10 @@ public class AutoForCrater extends LinearOpMode {
         newRightBackTarget = robot.rightBack.getCurrentPosition() + moveCounts;
 
         // Set Target and Turn On RUN_TO_POSITION
-        robot.leftFront.setTargetPosition(newLeftFrontTarget);
-        robot.leftBack.setTargetPosition(newLeftBackTarget);
-        robot.rightFront.setTargetPosition(newRightFrontTarget);
-        robot.rightBack.setTargetPosition(newRightBackTarget);
+        robot.leftFront.setTargetPosition(4450);
+        robot.leftBack.setTargetPosition(4450);
+        robot.rightBack.setTargetPosition(4450);
+        robot.rightFront.setTargetPosition(4450);
 
         //Do strafing right stuff
         robot.leftFront.setPower(1);
@@ -371,15 +362,9 @@ public class AutoForCrater extends LinearOpMode {
             telemetry.update();
             idle();
         }
-        sleep(500);
-
+        sleep(250);
+*/
         robot.allMotorsStop();
-
-        /*while (opModeIsActive()) {
-            robot.firstJewel();
-            sleep(750);
-        }
-        */
 
         telemetry.addData("Path", "Complete");
         telemetry.update();

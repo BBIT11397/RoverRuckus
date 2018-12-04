@@ -36,7 +36,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 public class ArmEncoderTest extends LinearOpMode {
 
     /* Declare OpMode members. */
-    Hardware robot           = new Hardware();                 // Use a OurRobot's hardware
+    Hardware robot = new Hardware();                 // Use a OurRobot's hardware
 
     @Override
     public void runOpMode() {
@@ -50,37 +50,33 @@ public class ArmEncoderTest extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-          if (gamepad1.dpad_down || gamepad1.dpad_up) {
-              telemetry.addLine()
-                      .addData("Manual" , robot.liftArm.getCurrentPosition());
-              telemetry.update();
-              if (gamepad1.dpad_down) {
-                  robot.liftArm.setPower(1);
-              }
+            if (gamepad1.dpad_down || gamepad1.dpad_up) {
+                telemetry.addLine()
+                        .addData("Manual", robot.liftArm.getCurrentPosition());
+                telemetry.update();
+                if (gamepad1.dpad_down) {
+                    robot.liftArm.setPower(1);
+                }
 
-              if (gamepad1.dpad_up) {
-                  robot.liftArm.setPower(-1);
-              }
-          } else {
-              robot.liftArm.setPower(0);
-          }
+                if (gamepad1.dpad_up) {
+                    robot.liftArm.setPower(-1);
+                }
+            } else {
+                robot.liftArm.setPower(0);
+            }
 
-          if(gamepad1.a || gamepad1.y){
-              if (gamepad1.y){
-                  robot.liftArm.setTargetPosition(-1087);
-                  robot.liftArm.setPower(1);
-                  while (robot.liftArm.isBusy()){
-                      idle();
-                      telemetry.addLine()
-                              .addData("Auto" , robot.liftArm.getCurrentPosition());
-                      telemetry.update();
-                  }
-                  robot.liftArm.setPower(0);
-              }
-              if(gamepad1.a){
-                  robot.liftArm.setPower(1);
-              }
-          }
+            telemetry.addLine()
+                    .addData("alpha", robot.colorSensor.alpha());
+            telemetry.addLine()
+                    .addData("green", robot.colorSensor.green());
+            telemetry.addLine()
+                    .addData("blue", robot.colorSensor.blue());
+            telemetry.addLine()
+                    .addData("red", robot.colorSensor.red());
+            telemetry.addLine()
+                    .addData("argb", robot.colorSensor.argb());
+            telemetry.update();
+
         }
     }
 }
