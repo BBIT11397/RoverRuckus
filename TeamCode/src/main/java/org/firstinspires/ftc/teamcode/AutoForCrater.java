@@ -77,7 +77,7 @@ public class AutoForCrater extends LinearOpMode {
     static final double TURN_SPEED = 0.5;
     static final double STRAIGHT_OUT = 0.25;
     public double LIFT_SPEED = 1;
-    public final double newColorPosition = robot.sampleArm.getPosition() + 0.05;
+    public double newColorPosition = .6;
 
 
     //strafeLeft Function
@@ -169,10 +169,10 @@ public class AutoForCrater extends LinearOpMode {
         newLeftBackTarget = (robot.leftBack.getCurrentPosition() - moveCounts);
 */
         // Set Target and Turn On RUN_TO_POSITION
-        robot.rightFront.setTargetPosition(-1069);
-        robot.rightBack.setTargetPosition(1069);
-        robot.leftFront.setTargetPosition(1069);
-        robot.leftBack.setTargetPosition(-1069);
+        robot.rightFront.setTargetPosition(-800);
+        robot.rightBack.setTargetPosition(800);
+        robot.leftFront.setTargetPosition(800);
+        robot.leftBack.setTargetPosition(-800);
 
         //Do strafing left stuff
         robot.rightBack.setPower(1);
@@ -232,48 +232,170 @@ public class AutoForCrater extends LinearOpMode {
 
         robot.allMotorsStop();
 
-        robot.sampleArm.setPosition(.25);
+        robot.sampleArm.setPosition(.6);
 
-        while(robot.colorSensor.alpha() <16) {
+        sleep(250);
+
+        boolean foundMineral = false;
+
+        while(robot.colorSensor.alpha() <16 && opModeIsActive()) {
+            newColorPosition = robot.sampleArm.getPosition() - 0.01;
             robot.sampleArm.setPosition(newColorPosition);
-            sleep(100);
+            sleep(250);
+            idle();
             if (robot.colorSensor.alpha() >16) {
-                robot.sampleArm.setPosition(newColorPosition);
+                robot.sampleArm.setPosition(newColorPosition - 0.01);
                 sleep(100);
+                foundMineral = true;
                 continue;
+            }
+
+        }
+
+
+        if (foundMineral == true){
+            if (robot.colorSensor.alpha() <30) {
+
+                robot.sampleArm.setPosition(1);
+                sleep(250);
+
+                robot.rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                robot.rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+                robot.rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                robot.rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                robot.leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                robot.leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+                robot.rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                robot.leftBack.setTargetPosition(2500);
+                robot.leftFront.setTargetPosition(2500);
+                robot.rightFront.setTargetPosition(2500);
+                robot.rightBack.setTargetPosition(2500);
+
+                robot.leftFront.setPower(1);
+                robot.leftBack.setPower(1);
+                robot.rightBack.setPower(1);
+                robot.rightFront.setPower(1);
+
+                while (robot.checkMotorIsBusy() && opModeIsActive()){
+                    telemetry.addLine()
+                            .addData("Task", "knock off gold + drive to crater");
+                    telemetry.update();
+                    idle();
+                }
+                sleep(250);
+            } else {
+
+                robot.sampleArm.setPosition(1);
+                sleep(250);
+
+                robot.rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                robot.rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+                robot.rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                robot.rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                robot.leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                robot.leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+                robot.rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                // Set Target and Turn On RUN_TO_POSITION
+                robot.leftFront.setTargetPosition(2000);
+                robot.leftBack.setTargetPosition(-2000);
+                robot.rightFront.setTargetPosition(-2000);
+                robot.rightBack.setTargetPosition(2000);
+
+                //Do strafing right stuff
+                robot.leftFront.setPower(1);
+                robot.leftBack.setPower(1);
+                robot.rightBack.setPower(1);
+                robot.rightFront.setPower(1);
+
+                while (robot.checkMotorIsBusy() && opModeIsActive()) {
+                    telemetry.addLine()
+                            .addData("Task", "strafe to other mineral");
+                    telemetry.update();
+                    idle();
+                }
+                sleep(250);
+
+                robot.sampleArm.setPosition(.8);
+                sleep(250);
+
+                while (robot.colorSensor.alpha() < 16 && opModeIsActive()) {
+                    newColorPosition = robot.sampleArm.getPosition() - 0.01;
+                    robot.sampleArm.setPosition(newColorPosition);
+                    sleep(250);
+                    idle();
+                    if (robot.colorSensor.alpha() > 16) {
+                        robot.sampleArm.setPosition(newColorPosition - 0.01);
+                        sleep(100);
+                        foundMineral = true;
+                        continue;
+                    }
+                }
+
+                if (foundMineral == true) {
+                    robot.sampleArm.setPosition(1);
+                    sleep(250);
+
+                    robot.rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    robot.rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+                    robot.rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    robot.rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    robot.leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    robot.leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+                    robot.rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    robot.rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    robot.leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    robot.leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                    robot.leftBack.setTargetPosition(2500);
+                    robot.leftFront.setTargetPosition(2500);
+                    robot.rightFront.setTargetPosition(2500);
+                    robot.rightBack.setTargetPosition(2500);
+
+                    robot.leftFront.setPower(1);
+                    robot.leftBack.setPower(1);
+                    robot.rightBack.setPower(1);
+                    robot.rightFront.setPower(1);
+
+                    while (robot.checkMotorIsBusy() && opModeIsActive()) {
+                        telemetry.addLine()
+                                .addData("Task", "knock off gold + drive to crater");
+                        telemetry.update();
+                        idle();
+                    }
+                    sleep(250);
+                }
             }
         }
 
 
-        //strafeRight Function
-        robot.rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        robot.rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        robot.rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        // Determine new target position, and pass to motor controller
-        /*moveCounts = (int)(15 * COUNTS_PER_INCH);
-        newRightFrontTarget = (robot.rightFront.getCurrentPosition() + moveCounts);
-        newRightBackTarget = (robot.rightBack.getCurrentPosition() - moveCounts);
-        newLeftFrontTarget = (robot.leftFront.getCurrentPosition() - moveCounts);
-        newLeftBackTarget = (robot.leftBack.getCurrentPosition() + moveCounts);
+        robot.leftFront.setPower(-0);
+        robot.leftBack.setPower(0);
+        robot.rightBack.setPower(0);
+        robot.rightFront.setPower(0);
 
 
 
-
-
-
-        // Set Target and Turn On RUN_TO_POSITION
+      /*  // Set Target and Turn On RUN_TO_POSITION
         robot.rightFront.setTargetPosition(1335);
         robot.rightBack.setTargetPosition(-1335);
         robot.leftFront.setTargetPosition(-1335);
