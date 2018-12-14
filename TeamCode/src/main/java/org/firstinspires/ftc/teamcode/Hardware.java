@@ -59,12 +59,13 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class Hardware
 {
     /* Public OpMode members. */
-    public DcMotor  leftFront  = null;
-    public DcMotor  leftBack   = null;
-    public DcMotor  rightFront = null;
-    public DcMotor  rightBack  = null;
-    public DcMotor  liftArm    = null;
-    public Servo    sampleArm  = null;
+    public DcMotor leftFront   = null;
+    public DcMotor leftBack    = null;
+    public DcMotor rightFront  = null;
+    public DcMotor rightBack   = null;
+    public DcMotor liftArm     = null;
+    public Servo   sampleArm   = null;
+    public Servo   markerServo = null;
 
     int     newRightFrontTarget;
     int     moveCounts;
@@ -115,6 +116,7 @@ public class Hardware
         colorSensor = hwMap.get(ColorSensor.class, "colorSensor");
 
         sampleArm = hwMap.get(Servo.class, "sampleArm");
+        markerServo = hwMap.get(Servo.class, "markerServo");
 
         leftBack.setDirection(DcMotor.Direction.FORWARD);
         rightFront.setDirection(DcMotor.Direction.REVERSE);
@@ -180,21 +182,6 @@ public class Hardware
         leftBack.setPower(-speed);
     }
     public void strafeRight(double speed , int inches) {
-        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
         // Determine new target position, and pass to motor controller
         moveCounts = (int)(inches * COUNTS_PER_INCH);
         newLeftFrontTarget = leftFront.getCurrentPosition() + moveCounts;
@@ -207,6 +194,11 @@ public class Hardware
         leftBack.setTargetPosition(newLeftBackTarget);
         rightFront.setTargetPosition(newRightFrontTarget);
         rightBack.setTargetPosition(newRightBackTarget);
+
+        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         //Do strafing right stuff
         leftFront.setPower(-speed);
