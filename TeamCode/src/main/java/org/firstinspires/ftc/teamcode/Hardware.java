@@ -317,10 +317,6 @@ public class Hardware
         rightFront.setPower(0);
     }
 
-    public void firstJewel(){
-        sampleArm.setPosition(ACUTE_ANGLE);
-    }
-
     public boolean checkMotorIsBusy (){
         if (leftFront.isBusy() || leftBack.isBusy() || rightBack.isBusy() || rightFront.isBusy()){
             return true;

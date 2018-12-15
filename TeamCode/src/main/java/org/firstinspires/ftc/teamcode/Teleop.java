@@ -68,6 +68,7 @@ public class Teleop extends LinearOpMode {
         double max;
         double strafeLeft;
         double strafeRight;
+
         boolean notClose = true;
         int topEncoderCount = 80000;
 
@@ -144,6 +145,13 @@ public class Teleop extends LinearOpMode {
                 }
             } else {
                 robot.liftArm.setPower(0);
+            }
+
+            if (gamepad1.a){
+                robot.markerServo.setPosition(-1);
+            }
+            if(gamepad1.b){
+                robot.markerServo.setPosition(1);
             }
 
             telemetry.addLine()

@@ -73,29 +73,10 @@ public class AutoForDepot extends LinearOpMode {
     static final double WHEEL_DIAMETER_INCHES = 4.0;     // For figuring circumference
     static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
-    static final double DRIVE_SPEED = 0.6;
-    static final double TURN_SPEED = 0.5;
-    static final double STRAIGHT_OUT = 0.25;
-    public double LIFT_SPEED = 1;
     public double newColorPosition = .7;
-
-
-    //strafeLeft Function
-    int     newRightFrontTarget;
-    int     moveCounts;
-    int     newRightBackTarget;
-    int     newLeftFrontTarget;
-    int     newLeftBackTarget;
-
-
 
     @Override
     public void runOpMode() {
-
-        /*
-         * Initialize the drive system variables.
-         * The init() method of the hardware class does all the work here
-         */
         robot.init(hardwareMap, telemetry);
 
         // Send telemetry message to signify robot waiting;
@@ -147,14 +128,14 @@ public class AutoForDepot extends LinearOpMode {
         robot.leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         // Set Target and Turn On RUN_TO_POSITION
-        robot.rightFront.setTargetPosition(-800);
-        robot.rightBack.setTargetPosition(800);
-        robot.leftFront.setTargetPosition(800);
-        robot.leftBack.setTargetPosition(-800);
+        robot.rightFront.setTargetPosition(-725);
+        robot.rightBack.setTargetPosition(725);
+        robot.leftFront.setTargetPosition(725);
+        robot.leftBack.setTargetPosition(-725);
 
         //Do strafing left stuff
-        robot.rightBack.setPower(.75);
-        robot.rightFront.setPower(.75);
+        robot.rightBack.setPower(1);
+        robot.rightFront.setPower(1);
         robot.leftFront.setPower(1);
         robot.leftBack.setPower(1);
 
@@ -204,20 +185,23 @@ public class AutoForDepot extends LinearOpMode {
 
         robot.allMotorsStop();
 
-        robot.sampleArm.setPosition(.8);
+        robot.sampleArm.setPosition(.65);
 
         sleep(250);
 
         boolean foundMineral = false;
 
-        while (robot.colorSensor.alpha() <= 22 && opModeIsActive()) {
+        while (robot.colorSensor.alpha() < 32 && opModeIsActive()) {
+            telemetry.addLine()
+                    .addData("alpha", robot.colorSensor.alpha());
+            telemetry.update();
             newColorPosition = robot.sampleArm.getPosition() - 0.01;
             robot.sampleArm.setPosition(newColorPosition);
             sleep(250);
             idle();
-            if (robot.colorSensor.alpha() > 22) {
-                robot.sampleArm.setPosition(newColorPosition - 0.05);
-                sleep(100);
+            if (robot.colorSensor.alpha() >= 32) {
+                robot.sampleArm.setPosition(newColorPosition - 0.07);
+                sleep(250);
                 foundMineral = true;
                 continue;
             }
@@ -225,7 +209,11 @@ public class AutoForDepot extends LinearOpMode {
 
 
         if (foundMineral == true) {
-            if (robot.colorSensor.alpha() < 35) {
+            if (robot.colorSensor.alpha() < 45) {
+
+                telemetry.addLine()
+                        .addData("alpha", robot.colorSensor.alpha());
+                telemetry.update();
 
                 robot.sampleArm.setPosition(1);
                 sleep(250);
@@ -311,15 +299,22 @@ public class AutoForDepot extends LinearOpMode {
                 sleep(250);
 
                 boolean foundMineral2 = false;
-                while (robot.colorSensor.alpha() <= 22 && opModeIsActive()) {
+                while (robot.colorSensor.alpha() < 31 && opModeIsActive()) {
                     newColorPosition = robot.sampleArm.getPosition() - 0.01;
                     robot.sampleArm.setPosition(newColorPosition);
                     sleep(250);
                     idle();
-                    if (robot.colorSensor.alpha() > 22) {
+                    if (robot.colorSensor.alpha() >= 31) {
+                        telemetry.addLine()
+                                .addData("alpha", robot.colorSensor.alpha());
+                        telemetry.update();
                         robot.sampleArm.setPosition(newColorPosition - 0.05);
-                        if(robot.colorSensor.alpha()>35) {
-                            sleep(100);
+                        sleep(250);
+                        if(robot.colorSensor.alpha() < 40) {
+                            telemetry.addLine()
+                                    .addData("alpha", robot.colorSensor.alpha());
+                            telemetry.update();
+                            sleep(250);
                             foundMineral2 = true;
                             continue;
                         }
@@ -345,10 +340,10 @@ public class AutoForDepot extends LinearOpMode {
                     robot.leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     robot.leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-                    robot.leftBack.setTargetPosition(3700);
-                    robot.leftFront.setTargetPosition(3700);
-                    robot.rightFront.setTargetPosition(3700);
-                    robot.rightBack.setTargetPosition(3700);
+                    robot.leftBack.setTargetPosition(3000);
+                    robot.leftFront.setTargetPosition(3000);
+                    robot.rightFront.setTargetPosition(3000);
+                    robot.rightBack.setTargetPosition(3000);
 
                     robot.leftFront.setPower(1);
                     robot.leftBack.setPower(1);
@@ -509,8 +504,7 @@ public class AutoForDepot extends LinearOpMode {
                     sleep(250);
                     robot.allMotorsStop();
 
-
-                    robot.markerServo.setPosition(0);
+                    robot.markerServo.setPosition(-1);
                     sleep(100);
                 }
 
