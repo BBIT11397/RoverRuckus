@@ -134,8 +134,8 @@ public class AutoForDepot extends LinearOpMode {
         robot.leftBack.setTargetPosition(-725);
 
         //Do strafing left stuff
-        robot.rightBack.setPower(1);
-        robot.rightFront.setPower(1);
+        robot.rightBack.setPower(.70);
+        robot.rightFront.setPower(.70);
         robot.leftFront.setPower(1);
         robot.leftBack.setPower(1);
 
@@ -208,7 +208,7 @@ public class AutoForDepot extends LinearOpMode {
 
 
         if (foundMineral == true) {
-            robot.sampleArm.setPosition(newColorPosition - 0.02);
+            robot.sampleArm.setPosition(newColorPosition - 0.04);
             sleep(1000);
 
             if (robot.colorSensor.alpha() < 37) {
@@ -363,7 +363,7 @@ public class AutoForDepot extends LinearOpMode {
                 sleep(250);
 
                 boolean foundMineral2 = false;
-                while (robot.colorSensor.alpha() < 20 && opModeIsActive()) {
+                while (robot.colorSensor.alpha() <= 20 && opModeIsActive()) {
                     newColorPosition = robot.sampleArm.getPosition() - 0.01;
                     robot.sampleArm.setPosition(newColorPosition);
                     sleep(250);
@@ -501,7 +501,7 @@ public class AutoForDepot extends LinearOpMode {
                     robot.allMotorsStop();
 
 /* drop off marker code... not used due to less of time
-
+l
                     robot.rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                     robot.rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                     robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
