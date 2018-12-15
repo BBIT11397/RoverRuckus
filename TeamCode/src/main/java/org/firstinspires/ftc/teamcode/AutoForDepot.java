@@ -164,10 +164,10 @@ public class AutoForDepot extends LinearOpMode {
         robot.leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         // Set Target and Turn On RUN_TO_POSITION
-        robot.leftBack.setTargetPosition(2660);
-        robot.leftFront.setTargetPosition(2660);
-        robot.rightFront.setTargetPosition(2660);
-        robot.rightBack.setTargetPosition(2660);
+        robot.leftBack.setTargetPosition(2600);
+        robot.leftFront.setTargetPosition(2600);
+        robot.rightFront.setTargetPosition(2600);
+        robot.rightBack.setTargetPosition(2600);
 
         //Do strafing right stuff
         robot.leftFront.setPower(1);
@@ -191,7 +191,7 @@ public class AutoForDepot extends LinearOpMode {
 
         boolean foundMineral = false;
 
-        while (robot.colorSensor.alpha() < 32 && opModeIsActive()) {
+        while (robot.colorSensor.alpha() < 20 && opModeIsActive()) {
             telemetry.addLine()
                     .addData("alpha", robot.colorSensor.alpha());
             telemetry.update();
@@ -199,8 +199,7 @@ public class AutoForDepot extends LinearOpMode {
             robot.sampleArm.setPosition(newColorPosition);
             sleep(250);
             idle();
-            if (robot.colorSensor.alpha() >= 32) {
-                robot.sampleArm.setPosition(newColorPosition - 0.07);
+            if (robot.colorSensor.alpha() >= 20) {
                 sleep(250);
                 foundMineral = true;
                 continue;
@@ -209,7 +208,10 @@ public class AutoForDepot extends LinearOpMode {
 
 
         if (foundMineral == true) {
-            if (robot.colorSensor.alpha() < 45) {
+            robot.sampleArm.setPosition(newColorPosition - 0.02);
+            sleep(1000);
+
+            if (robot.colorSensor.alpha() < 37) {
 
                 telemetry.addLine()
                         .addData("alpha", robot.colorSensor.alpha());
@@ -217,6 +219,43 @@ public class AutoForDepot extends LinearOpMode {
 
                 robot.sampleArm.setPosition(1);
                 sleep(250);
+
+                //strafeLeft Function
+                robot.rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                robot.rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+                robot.rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                robot.rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                robot.leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                robot.leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+                robot.rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                // Set Target and Turn On RUN_TO_POSITION
+                robot.rightFront.setTargetPosition(300);
+                robot.rightBack.setTargetPosition(-300);
+                robot.leftFront.setTargetPosition(-300);
+                robot.leftBack.setTargetPosition(300);
+
+                //Do strafing left stuff
+                robot.rightBack.setPower(1);
+                robot.rightFront.setPower(1);
+                robot.leftFront.setPower(1);
+                robot.leftBack.setPower(1);
+
+                while (robot.checkMotorIsBusy() && opModeIsActive()) {
+                    telemetry.addLine()
+                            .addData("Task", "move out of way of other mineral");
+                    ;
+                    idle();
+                }
+                sleep(150);
+                robot.allMotorsStop();
 
                 robot.rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 robot.rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -291,6 +330,31 @@ public class AutoForDepot extends LinearOpMode {
                     telemetry.update();
                     idle();
                 }
+                sleep(150);
+
+                robot.allMotorsStop();
+
+                robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+                robot.leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                robot.leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+                robot.leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                robot.leftFront.setTargetPosition(300);
+                robot.leftBack.setTargetPosition(300);
+
+                robot.leftBack.setPower(1);
+                robot.leftFront.setPower(1);
+
+                while (robot.checkMotorIsBusy() && opModeIsActive()) {
+                    telemetry.addLine()
+                            .addData("Task", "turn to mineral");
+                    telemetry.update();
+                    idle();
+                }
                 sleep(250);
 
                 robot.allMotorsStop();
@@ -299,18 +363,18 @@ public class AutoForDepot extends LinearOpMode {
                 sleep(250);
 
                 boolean foundMineral2 = false;
-                while (robot.colorSensor.alpha() < 31 && opModeIsActive()) {
+                while (robot.colorSensor.alpha() < 20 && opModeIsActive()) {
                     newColorPosition = robot.sampleArm.getPosition() - 0.01;
                     robot.sampleArm.setPosition(newColorPosition);
                     sleep(250);
                     idle();
-                    if (robot.colorSensor.alpha() >= 31) {
+                    if (robot.colorSensor.alpha() >= 20) {
                         telemetry.addLine()
                                 .addData("alpha", robot.colorSensor.alpha());
                         telemetry.update();
                         robot.sampleArm.setPosition(newColorPosition - 0.05);
-                        sleep(250);
-                        if(robot.colorSensor.alpha() < 40) {
+                        sleep(1000);
+                        if(robot.colorSensor.alpha() <= 37) {
                             telemetry.addLine()
                                     .addData("alpha", robot.colorSensor.alpha());
                             telemetry.update();
@@ -436,6 +500,8 @@ public class AutoForDepot extends LinearOpMode {
                     sleep(250);
                     robot.allMotorsStop();
 
+/* drop off marker code... not used due to less of time
+
                     robot.rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                     robot.rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                     robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -506,7 +572,7 @@ public class AutoForDepot extends LinearOpMode {
 
                     robot.markerServo.setPosition(-1);
                     sleep(100);
-                }
+                */}
 
             }
         }
