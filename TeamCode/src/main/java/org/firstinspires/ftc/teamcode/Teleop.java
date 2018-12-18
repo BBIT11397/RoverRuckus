@@ -78,8 +78,6 @@ public class Teleop extends LinearOpMode {
         robot.init(hardwareMap, telemetry);
 
         // Send telemetry message to signify robot waiting;
-        telemetry.addData("Say", "done with init");
-        telemetry.update();
 
         robot.leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -133,9 +131,6 @@ public class Teleop extends LinearOpMode {
             telemetry.update();
 */
             if (gamepad1.dpad_down || gamepad1.dpad_up) {
-                telemetry.addLine()
-                        .addData("Manual" , robot.liftArm.getCurrentPosition());
-                telemetry.update();
                 if (gamepad1.dpad_down) {
                     robot.liftArm.setPower(1);
                 }
@@ -153,18 +148,6 @@ public class Teleop extends LinearOpMode {
             if(gamepad1.b){
                 robot.sampleArm.setPosition(1);
             }
-
-            telemetry.addLine()
-                        .addData("red", robot.colorSensor.red());
-                telemetry.addLine()
-                        .addData("blue", robot.colorSensor.blue());
-                telemetry.addLine()
-                        .addData("green", robot.colorSensor.green());
-                telemetry.addLine()
-                        .addData("hue", robot.colorSensor.argb());
-                telemetry.addLine()
-                        .addData("lift arm", robot.liftArm.getCurrentPosition());
-                telemetry.update();
             }
         }
     }

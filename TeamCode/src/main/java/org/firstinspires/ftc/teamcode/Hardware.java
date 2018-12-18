@@ -318,7 +318,8 @@ public class Hardware
     }
 
     public boolean checkMotorIsBusy (){
-        if (leftFront.isBusy() || leftBack.isBusy() || rightBack.isBusy() || rightFront.isBusy()){
+       // if (leftFront.isBusy() || leftBack.isBusy() || rightBack.isBusy() || rightFront.isBusy()){
+        if (leftFront.isBusy()){
             return true;
         }
         return false;

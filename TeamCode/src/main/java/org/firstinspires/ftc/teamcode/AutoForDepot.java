@@ -75,6 +75,7 @@ public class AutoForDepot extends LinearOpMode {
             (WHEEL_DIAMETER_INCHES * 3.1415);
     public double newColorPosition = .7;
 
+
     @Override
     public void runOpMode() {
         robot.init(hardwareMap, telemetry);
@@ -111,23 +112,7 @@ public class AutoForDepot extends LinearOpMode {
         }
         robot.liftArm.setPower(0);
 
-        //strafeLeft Function
-        robot.rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        robot.rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        robot.rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        // Set Target and Turn On RUN_TO_POSITION
+        setUpMotors();
         robot.rightFront.setTargetPosition(-725);
         robot.rightBack.setTargetPosition(725);
         robot.leftFront.setTargetPosition(725);
@@ -148,22 +133,7 @@ public class AutoForDepot extends LinearOpMode {
         sleep(250);
         robot.allMotorsStop();
 
-        robot.rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        robot.rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        robot.rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        // Set Target and Turn On RUN_TO_POSITION
+        setUpMotors();
         robot.leftBack.setTargetPosition(2600);
         robot.leftFront.setTargetPosition(2600);
         robot.rightFront.setTargetPosition(2600);
@@ -191,7 +161,11 @@ public class AutoForDepot extends LinearOpMode {
 
         boolean foundMineral = false;
 
-        while (robot.colorSensor.alpha() < 20 && opModeIsActive()) {
+        double floor = robot.colorSensor.alpha();
+        double mineralvalue = floor + 10;
+        double lastReading = 0;
+
+        while (robot.colorSensor.alpha() <= mineralvalue && opModeIsActive()) {
             telemetry.addLine()
                     .addData("alpha", robot.colorSensor.alpha());
             telemetry.update();
@@ -199,20 +173,30 @@ public class AutoForDepot extends LinearOpMode {
             robot.sampleArm.setPosition(newColorPosition);
             sleep(250);
             idle();
-            if (robot.colorSensor.alpha() >= 20) {
+            lastReading = robot.colorSensor.alpha();
+            if (lastReading >= floor + 10) {
                 sleep(250);
                 foundMineral = true;
                 continue;
             }
         }
 
+        double lowestWhiteValue = floor + 50;
+        double currentReading;
+        double highestReading = lastReading;
 
         if (foundMineral == true) {
             robot.sampleArm.setPosition(newColorPosition - 0.04);
             sleep(1000);
 
-            if (robot.colorSensor.alpha() < 37) {
+            currentReading = robot.colorSensor.alpha();
 
+            if(currentReading > lastReading){
+                highestReading = currentReading;
+            }
+
+            if (highestReading < lowestWhiteValue) {
+                //gold is found
                 telemetry.addLine()
                         .addData("alpha", robot.colorSensor.alpha());
                 telemetry.update();
@@ -220,22 +204,7 @@ public class AutoForDepot extends LinearOpMode {
                 robot.sampleArm.setPosition(1);
                 sleep(250);
 
-                //strafeLeft Function
-                robot.rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                robot.rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-                robot.rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                robot.rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                robot.leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                robot.leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-                robot.rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                robot.rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                robot.leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                robot.leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
+                setUpMotors();
                 // Set Target and Turn On RUN_TO_POSITION
                 robot.rightFront.setTargetPosition(300);
                 robot.rightBack.setTargetPosition(-300);
@@ -257,21 +226,7 @@ public class AutoForDepot extends LinearOpMode {
                 sleep(150);
                 robot.allMotorsStop();
 
-                robot.rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                robot.rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-                robot.rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                robot.rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                robot.leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                robot.leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-                robot.rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                robot.rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                robot.leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                robot.leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
+                setUpMotors();
                 robot.leftBack.setTargetPosition(3700);
                 robot.leftFront.setTargetPosition(3700);
                 robot.rightFront.setTargetPosition(3700);
@@ -290,29 +245,14 @@ public class AutoForDepot extends LinearOpMode {
                 }
                 sleep(250);
 
-                robot.markerServo.setPosition(0);
-                sleep(100);
+                // robot.markerServo.setPosition(0);
+                //  sleep(100);
             } else {
 
                 robot.sampleArm.setPosition(1);
                 sleep(250);
 
-                robot.rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                robot.rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-                robot.rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                robot.rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                robot.leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                robot.leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-                robot.rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                robot.rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                robot.leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                robot.leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                // Set Target and Turn On RUN_TO_POSITION
+                setUpMotors();
                 robot.leftFront.setTargetPosition(2000);
                 robot.leftBack.setTargetPosition(-2000);
                 robot.rightFront.setTargetPosition(-2000);
@@ -334,15 +274,7 @@ public class AutoForDepot extends LinearOpMode {
 
                 robot.allMotorsStop();
 
-                robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-                robot.leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                robot.leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-                robot.leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                robot.leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
+                setUpMotors();
                 robot.leftFront.setTargetPosition(300);
                 robot.leftBack.setTargetPosition(300);
 
@@ -360,21 +292,28 @@ public class AutoForDepot extends LinearOpMode {
                 robot.allMotorsStop();
 
                 robot.sampleArm.setPosition(.7);
-                sleep(250);
+                sleep(1000);
 
                 boolean foundMineral2 = false;
-                while (robot.colorSensor.alpha() <= 20 && opModeIsActive()) {
+                while (robot.colorSensor.alpha() <= mineralvalue && opModeIsActive()) {
                     newColorPosition = robot.sampleArm.getPosition() - 0.01;
                     robot.sampleArm.setPosition(newColorPosition);
                     sleep(250);
                     idle();
-                    if (robot.colorSensor.alpha() >= 20) {
+                    lastReading = robot.colorSensor.alpha();
+                    if (lastReading >= floor + 10) {
                         telemetry.addLine()
                                 .addData("alpha", robot.colorSensor.alpha());
                         telemetry.update();
                         robot.sampleArm.setPosition(newColorPosition - 0.05);
                         sleep(1000);
-                        if(robot.colorSensor.alpha() <= 37) {
+                        currentReading = robot.colorSensor.alpha();
+
+                        if(currentReading > lastReading){
+                            highestReading = currentReading;
+                        }
+
+                        if(highestReading <= lowestWhiteValue) {
                             telemetry.addLine()
                                     .addData("alpha", robot.colorSensor.alpha());
                             telemetry.update();
@@ -389,21 +328,7 @@ public class AutoForDepot extends LinearOpMode {
                     robot.sampleArm.setPosition(1);
                     sleep(500);
 
-                    robot.rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    robot.rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-                    robot.rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    robot.rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    robot.leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    robot.leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-                    robot.rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    robot.rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    robot.leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    robot.leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
+                    setUpMotors();
                     robot.leftBack.setTargetPosition(3000);
                     robot.leftFront.setTargetPosition(3000);
                     robot.rightFront.setTargetPosition(3000);
@@ -426,23 +351,7 @@ public class AutoForDepot extends LinearOpMode {
                     sleep(100);
                 } else {
                     // strafe to 3rd and final mineral
-                    robot.rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    robot.rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-                    robot.rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    robot.rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    robot.leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    robot.leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-                    robot.rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    robot.rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    robot.leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    robot.leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-
-                    // Set Target and Turn On RUN_TO_POSITION
+                    setUpMotors();
                     robot.rightFront.setTargetPosition(5050);
                     robot.rightBack.setTargetPosition(-5050);
                     robot.leftFront.setTargetPosition(-5050);
@@ -466,21 +375,7 @@ public class AutoForDepot extends LinearOpMode {
                     robot.sampleArm.setPosition(1);
                     sleep(250);
 
-                    robot.rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    robot.rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-                    robot.rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    robot.rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    robot.leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    robot.leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-                    robot.rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    robot.rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    robot.leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    robot.leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
+                    setUpMotors();
                     robot.leftBack.setTargetPosition(3700);
                     robot.leftFront.setTargetPosition(3700);
                     robot.rightFront.setTargetPosition(3700);
@@ -502,21 +397,7 @@ public class AutoForDepot extends LinearOpMode {
 
 /* drop off marker code... not used due to less of time
 l
-                    robot.rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    robot.rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-                    robot.rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    robot.rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    robot.leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    robot.leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-                    robot.rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    robot.rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    robot.leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    robot.leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
+                    setUpMotors;
                     robot.leftBack.setTargetPosition(-700);
                     robot.leftFront.setTargetPosition(-700);
                     robot.rightFront.setTargetPosition(700);
@@ -536,21 +417,7 @@ l
                     sleep(250);
                     robot.allMotorsStop();
 
-                    robot.rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    robot.rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-                    robot.rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    robot.rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    robot.leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    robot.leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-                    robot.rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    robot.rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    robot.leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    robot.leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
+                    setUpMotors;
                     robot.leftBack.setTargetPosition(1000);
                     robot.leftFront.setTargetPosition(1000);
                     robot.rightFront.setTargetPosition(1000);
@@ -583,7 +450,25 @@ l
         robot.rightFront.setPower(0);
         robot.allMotorsStop();
 
-        telemetry.addData("Path", "Complete");
+        telemetry.addLine()
+                .addData("path", "complete");
         telemetry.update();
+    }
+
+    void setUpMotors() {
+        robot.rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        robot.rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        robot.rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 }
