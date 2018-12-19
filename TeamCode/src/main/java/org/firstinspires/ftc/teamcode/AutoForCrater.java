@@ -192,7 +192,7 @@ public class AutoForCrater extends LinearOpMode {
         double highestReading = 0;
 
         if (foundMineral == true) {
-            robot.sampleArm.setPosition(newColorPosition - 0.02);
+            robot.sampleArm.setPosition(newColorPosition - 0.04);
             sleep(250);
 
             telemetry.addLine()
@@ -216,10 +216,10 @@ public class AutoForCrater extends LinearOpMode {
 
                 //strafeLeft Function
                 setUpMotors();
-                robot.rightFront.setTargetPosition(300);
-                robot.rightBack.setTargetPosition(-300);
-                robot.leftFront.setTargetPosition(-300);
-                robot.leftBack.setTargetPosition(300);
+                robot.rightFront.setTargetPosition(400);
+                robot.rightBack.setTargetPosition(-400);
+                robot.leftFront.setTargetPosition(-400);
+                robot.leftBack.setTargetPosition(400);
 
                 //Do strafing left stuff
                 robot.rightBack.setPower(1);
@@ -301,7 +301,7 @@ public class AutoForCrater extends LinearOpMode {
                 }
                 sleep(150);
 
-                robot.sampleArm.setPosition(.6);
+                robot.sampleArm.setPosition(.7);
                 sleep(150);
 
                 boolean foundMineral2 = false;
@@ -340,6 +340,25 @@ public class AutoForCrater extends LinearOpMode {
 
                 if (foundMineral2 == true) {
                     robot.sampleArm.setPosition(1);
+                    sleep(150);
+
+                    setUpMotors();
+                    robot.leftBack.setTargetPosition(500);
+                    robot.leftFront.setTargetPosition(-500);
+                    robot.rightFront.setTargetPosition(500);
+                    robot.rightBack.setTargetPosition(-500);
+
+                    robot.leftBack.setPower(1);
+                    robot.leftFront.setPower(1);
+                    robot.rightFront.setPower(1);
+                    robot.rightBack.setPower(1);
+
+                    while (robot.checkMotorIsBusy() && opModeIsActive()) {
+                        telemetry.addLine()
+                                .addData("Task", "knock off gold + drive to crater");
+                        telemetry.update();
+                        idle();
+                    }
                     sleep(150);
 
                     setUpMotors();
