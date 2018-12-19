@@ -162,7 +162,7 @@ public class AutoForDepot extends LinearOpMode {
         boolean foundMineral = false;
 
         double floor = robot.colorSensor.alpha();
-        double mineralvalue = floor + 10;
+        double mineralvalue = floor + 6;
         double lastReading = 0;
 
         while (robot.colorSensor.alpha() <= mineralvalue && opModeIsActive()) {
@@ -174,14 +174,14 @@ public class AutoForDepot extends LinearOpMode {
             sleep(250);
             idle();
             lastReading = robot.colorSensor.alpha();
-            if (lastReading >= floor + 10) {
+            if (lastReading >= floor + 6) {
                 sleep(250);
                 foundMineral = true;
                 continue;
             }
         }
 
-        double lowestWhiteValue = floor + 50;
+        double lowestWhiteValue = floor + 40;
         double currentReading;
         double highestReading = lastReading;
 
@@ -206,10 +206,10 @@ public class AutoForDepot extends LinearOpMode {
 
                 setUpMotors();
                 // Set Target and Turn On RUN_TO_POSITION
-                robot.rightFront.setTargetPosition(300);
-                robot.rightBack.setTargetPosition(-300);
-                robot.leftFront.setTargetPosition(-300);
-                robot.leftBack.setTargetPosition(300);
+                robot.rightFront.setTargetPosition(400);
+                robot.rightBack.setTargetPosition(-400);
+                robot.leftFront.setTargetPosition(-400);
+                robot.leftBack.setTargetPosition(400);
 
                 //Do strafing left stuff
                 robot.rightBack.setPower(1);
@@ -245,8 +245,8 @@ public class AutoForDepot extends LinearOpMode {
                 }
                 sleep(250);
 
-                // robot.markerServo.setPosition(0);
-                //  sleep(100);
+                 robot.markerServo.setPosition(1);
+                 sleep(1000);
             } else {
 
                 robot.sampleArm.setPosition(1);
@@ -295,25 +295,28 @@ public class AutoForDepot extends LinearOpMode {
                 sleep(1000);
 
                 boolean foundMineral2 = false;
+
                 while (robot.colorSensor.alpha() <= mineralvalue && opModeIsActive()) {
                     newColorPosition = robot.sampleArm.getPosition() - 0.01;
                     robot.sampleArm.setPosition(newColorPosition);
                     sleep(250);
                     idle();
                     lastReading = robot.colorSensor.alpha();
-                    if (lastReading >= floor + 10) {
+                    highestReading = lastReading;
+                    if (lastReading >= floor + 6) {
                         telemetry.addLine()
                                 .addData("alpha", robot.colorSensor.alpha());
                         telemetry.update();
-                        robot.sampleArm.setPosition(newColorPosition - 0.05);
+                        robot.sampleArm.setPosition(newColorPosition - 0.04);
                         sleep(1000);
+
                         currentReading = robot.colorSensor.alpha();
 
                         if(currentReading > lastReading){
                             highestReading = currentReading;
                         }
 
-                        if(highestReading <= lowestWhiteValue) {
+                        if(highestReading < lowestWhiteValue) {
                             telemetry.addLine()
                                     .addData("alpha", robot.colorSensor.alpha());
                             telemetry.update();
@@ -347,9 +350,13 @@ public class AutoForDepot extends LinearOpMode {
                     }
                     sleep(250);
 
-                    robot.markerServo.setPosition(0);
-                    sleep(100);
+                    robot.markerServo.setPosition(1);
+                    sleep(1000);
                 } else {
+
+                    robot.sampleArm.setPosition(1);
+                    sleep(1000);
+
                     // strafe to 3rd and final mineral
                     setUpMotors();
                     robot.rightFront.setTargetPosition(5050);
@@ -372,9 +379,6 @@ public class AutoForDepot extends LinearOpMode {
                     sleep(250);
                     robot.allMotorsStop();
 
-                    robot.sampleArm.setPosition(1);
-                    sleep(250);
-
                     setUpMotors();
                     robot.leftBack.setTargetPosition(3700);
                     robot.leftFront.setTargetPosition(3700);
@@ -395,13 +399,11 @@ public class AutoForDepot extends LinearOpMode {
                     sleep(250);
                     robot.allMotorsStop();
 
-/* drop off marker code... not used due to less of time
-l
-                    setUpMotors;
-                    robot.leftBack.setTargetPosition(-700);
-                    robot.leftFront.setTargetPosition(-700);
-                    robot.rightFront.setTargetPosition(700);
-                    robot.rightBack.setTargetPosition(700);
+                    setUpMotors();
+                    robot.leftBack.setTargetPosition(-850);
+                    robot.leftFront.setTargetPosition(-850);
+                    robot.rightFront.setTargetPosition(850);
+                    robot.rightBack.setTargetPosition(850);
 
                     robot.leftFront.setPower(1);
                     robot.leftBack.setPower(1);
@@ -417,11 +419,11 @@ l
                     sleep(250);
                     robot.allMotorsStop();
 
-                    setUpMotors;
-                    robot.leftBack.setTargetPosition(1000);
-                    robot.leftFront.setTargetPosition(1000);
-                    robot.rightFront.setTargetPosition(1000);
-                    robot.rightBack.setTargetPosition(1000);
+                    setUpMotors();
+                    robot.leftBack.setTargetPosition(1500);
+                    robot.leftFront.setTargetPosition(1500);
+                    robot.rightFront.setTargetPosition(1500);
+                    robot.rightBack.setTargetPosition(1500);
 
                     robot.leftFront.setPower(1);
                     robot.leftBack.setPower(1);
@@ -437,9 +439,9 @@ l
                     sleep(250);
                     robot.allMotorsStop();
 
-                    robot.markerServo.setPosition(-1);
-                    sleep(100);
-                */}
+                    robot.markerServo.setPosition(1);
+                    sleep(1000);
+                }
 
             }
         }

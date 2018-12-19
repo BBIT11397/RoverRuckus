@@ -168,7 +168,7 @@ public class AutoForCrater extends LinearOpMode {
         boolean foundMineral = false;
 
         double floor = robot.colorSensor.alpha();
-        double mineralvalue = floor + 10;
+        double mineralvalue = floor + 6;
         double lastReading = 0;
 
         while (robot.colorSensor.alpha() <= mineralvalue && opModeIsActive()) {
@@ -180,14 +180,14 @@ public class AutoForCrater extends LinearOpMode {
             sleep(250);
             idle();
             lastReading = robot.colorSensor.alpha();
-            if (lastReading >= floor + 10) {
+            if (lastReading >= floor + 6) {
                 sleep(250);
                 foundMineral = true;
                 continue;
             }
         }
 
-        double lowestWhiteValue = floor + 50;
+        double lowestWhiteValue = floor + 40;
         double currentReading;
         double highestReading = 0;
 
@@ -314,7 +314,8 @@ public class AutoForCrater extends LinearOpMode {
                     sleep(100);
                     idle();
                     lastReading = robot.colorSensor.alpha();
-                    if (lastReading >= floor + 10) {
+                    highestReading = lastReading;
+                    if (lastReading >= floor + 6) {
                         telemetry.addLine()
                                 .addData("alpha", robot.colorSensor.alpha());
                         telemetry.update();
