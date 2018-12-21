@@ -189,7 +189,7 @@ public class AutoForCrater extends LinearOpMode {
 
         double lowestWhiteValue = floor + 40;
         double currentReading;
-        double highestReading = 0;
+        double highestReading = lastReading;
 
         if (foundMineral == true) {
             robot.sampleArm.setPosition(newColorPosition - 0.04);
@@ -212,7 +212,7 @@ public class AutoForCrater extends LinearOpMode {
                 telemetry.update();
 
                 robot.sampleArm.setPosition(1);
-                sleep(150);
+                sleep(250);
 
                 //strafeLeft Function
                 setUpMotors();
@@ -281,26 +281,6 @@ public class AutoForCrater extends LinearOpMode {
 
                 robot.allMotorsStop();
 
-                setUpMotors();
-                robot.leftFront.setTargetPosition(200);
-                robot.leftBack.setTargetPosition(200);
-                robot.rightFront.setTargetPosition(200);
-                robot.rightBack.setTargetPosition(200);
-
-                //Do strafing right stuff
-                robot.leftFront.setPower(.70);
-                robot.leftBack.setPower(.70);
-                robot.rightBack.setPower(1);
-                robot.rightFront.setPower(1);
-
-                while (robot.checkMotorIsBusy() && opModeIsActive()) {
-                    telemetry.addLine()
-                            .addData("Task", "forward to other mineral");
-                    telemetry.update();
-                    idle();
-                }
-                sleep(150);
-
                 robot.sampleArm.setPosition(.7);
                 sleep(150);
 
@@ -311,7 +291,7 @@ public class AutoForCrater extends LinearOpMode {
                     telemetry.addLine()
                             .addData("alpha", robot.colorSensor.alpha());
                     telemetry.update();
-                    sleep(100);
+                    sleep(250);
                     idle();
                     lastReading = robot.colorSensor.alpha();
                     highestReading = lastReading;
@@ -319,7 +299,7 @@ public class AutoForCrater extends LinearOpMode {
                         telemetry.addLine()
                                 .addData("alpha", robot.colorSensor.alpha());
                         telemetry.update();
-                        robot.sampleArm.setPosition(newColorPosition - 0.03);
+                        robot.sampleArm.setPosition(newColorPosition - 0.04);
                         sleep(1000);
 
                         currentReading = robot.colorSensor.alpha();
@@ -327,7 +307,7 @@ public class AutoForCrater extends LinearOpMode {
                         if(currentReading > lastReading){
                             highestReading = currentReading;
                         }
-                        if(highestReading <= lowestWhiteValue) {
+                        if(highestReading < lowestWhiteValue) {
                             telemetry.addLine()
                                     .addData("alpha", robot.colorSensor.alpha());
                             telemetry.update();
@@ -340,7 +320,7 @@ public class AutoForCrater extends LinearOpMode {
 
                 if (foundMineral2 == true) {
                     robot.sampleArm.setPosition(1);
-                    sleep(150);
+                    sleep(500);
 
                     setUpMotors();
                     robot.leftBack.setTargetPosition(500);
@@ -380,12 +360,15 @@ public class AutoForCrater extends LinearOpMode {
                     }
                     sleep(150);
                 } else {
+
+                    robot.sampleArm.setPosition(1);
+                    sleep(500);
                     // strafe to 3rd and final mineral
                     setUpMotors();
-                    robot.rightFront.setTargetPosition(5050);
-                    robot.rightBack.setTargetPosition(-5050);
-                    robot.leftFront.setTargetPosition(-5050);
-                    robot.leftBack.setTargetPosition(5050);
+                    robot.rightFront.setTargetPosition(4500);
+                    robot.rightBack.setTargetPosition(-4500);
+                    robot.leftFront.setTargetPosition(-4500);
+                    robot.leftBack.setTargetPosition(4500);
 
                     //Do strafing left stuff
                     robot.rightBack.setPower(1);

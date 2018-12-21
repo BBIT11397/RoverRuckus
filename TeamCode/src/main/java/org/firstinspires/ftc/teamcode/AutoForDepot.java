@@ -113,10 +113,10 @@ public class AutoForDepot extends LinearOpMode {
         robot.liftArm.setPower(0);
 
         setUpMotors();
-        robot.rightFront.setTargetPosition(-725);
-        robot.rightBack.setTargetPosition(725);
-        robot.leftFront.setTargetPosition(725);
-        robot.leftBack.setTargetPosition(-725);
+        robot.rightFront.setTargetPosition(725);
+        robot.rightBack.setTargetPosition(-725);
+        robot.leftFront.setTargetPosition(-725);
+        robot.leftBack.setTargetPosition(725);
 
         //Do strafing left stuff
         robot.rightBack.setPower(.70);
@@ -134,10 +134,10 @@ public class AutoForDepot extends LinearOpMode {
         robot.allMotorsStop();
 
         setUpMotors();
-        robot.leftBack.setTargetPosition(2600);
-        robot.leftFront.setTargetPosition(2600);
-        robot.rightFront.setTargetPosition(2600);
-        robot.rightBack.setTargetPosition(2600);
+        robot.leftBack.setTargetPosition(2800);
+        robot.leftFront.setTargetPosition(2800);
+        robot.rightFront.setTargetPosition(2800);
+        robot.rightBack.setTargetPosition(2800);
 
         //Do strafing right stuff
         robot.leftFront.setPower(1);
@@ -155,13 +155,34 @@ public class AutoForDepot extends LinearOpMode {
 
         robot.allMotorsStop();
 
-        robot.sampleArm.setPosition(.65);
+        setUpMotors();
+        robot.rightFront.setTargetPosition(-725);
+        robot.rightBack.setTargetPosition(725);
+        robot.leftFront.setTargetPosition(725);
+        robot.leftBack.setTargetPosition(-725);
 
+        //Do strafing left stuff
+        robot.rightBack.setPower(1);
+        robot.rightFront.setPower(1);
+        robot.leftFront.setPower(1);
+        robot.leftBack.setPower(1);
+
+        while (robot.checkMotorIsBusy() && opModeIsActive()) {
+            telemetry.addLine()
+                    .addData("Task", "Unhook");
+            ;
+            idle();
+        }
         sleep(250);
+        robot.allMotorsStop();
+
+        robot.sampleArm.setPosition(.85);
+        sleep(500);
+
+        double floor = robot.colorSensor.alpha();
 
         boolean foundMineral = false;
 
-        double floor = robot.colorSensor.alpha();
         double mineralvalue = floor + 6;
         double lastReading = 0;
 
@@ -187,7 +208,7 @@ public class AutoForDepot extends LinearOpMode {
 
         if (foundMineral == true) {
             robot.sampleArm.setPosition(newColorPosition - 0.04);
-            sleep(1000);
+            sleep(500);
 
             currentReading = robot.colorSensor.alpha();
 
@@ -291,8 +312,8 @@ public class AutoForDepot extends LinearOpMode {
 
                 robot.allMotorsStop();
 
-                robot.sampleArm.setPosition(.7);
-                sleep(1000);
+                robot.sampleArm.setPosition(.85);
+                sleep(500);
 
                 boolean foundMineral2 = false;
 
@@ -308,7 +329,7 @@ public class AutoForDepot extends LinearOpMode {
                                 .addData("alpha", robot.colorSensor.alpha());
                         telemetry.update();
                         robot.sampleArm.setPosition(newColorPosition - 0.04);
-                        sleep(1000);
+                        sleep(500);
 
                         currentReading = robot.colorSensor.alpha();
 
@@ -355,14 +376,13 @@ public class AutoForDepot extends LinearOpMode {
                 } else {
 
                     robot.sampleArm.setPosition(1);
-                    sleep(1000);
-
+                    sleep(500);
                     // strafe to 3rd and final mineral
                     setUpMotors();
-                    robot.rightFront.setTargetPosition(5050);
-                    robot.rightBack.setTargetPosition(-5050);
-                    robot.leftFront.setTargetPosition(-5050);
-                    robot.leftBack.setTargetPosition(5050);
+                    robot.rightFront.setTargetPosition(4500);
+                    robot.rightBack.setTargetPosition(-4500);
+                    robot.leftFront.setTargetPosition(-4500);
+                    robot.leftBack.setTargetPosition(4500);
 
                     //Do strafing left stuff
                     robot.rightBack.setPower(1);
