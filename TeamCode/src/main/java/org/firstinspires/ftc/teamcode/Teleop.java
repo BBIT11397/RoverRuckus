@@ -52,7 +52,7 @@ import org.firstinspires.ftc.teamcode.Hardware;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Teleop", group="OurRobot")
+@TeleOp(name="Teleop", group="bbit")
 public class Teleop extends LinearOpMode {
 
     /* Declare OpMode members. */
@@ -83,7 +83,9 @@ public class Teleop extends LinearOpMode {
         robot.rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.liftArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.liftArm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+      //  robot.liftArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         waitForStart();
 
@@ -142,12 +144,18 @@ public class Teleop extends LinearOpMode {
                 robot.liftArm.setPower(0);
             }
 
-            if (gamepad1.a){
+            if (gamepad1.a) {
                 robot.markerServo.setPosition(1);
             }
-            if(gamepad1.b){
+            if (gamepad1.b) {
                 robot.sampleArm.setPosition(1);
             }
-            }
+
+            telemetry.addLine()
+                    .addData("lift arm", robot.liftArm.getCurrentPosition());
+            telemetry.update();
+
         }
     }
+}
+

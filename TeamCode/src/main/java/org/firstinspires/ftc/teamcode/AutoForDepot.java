@@ -61,7 +61,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="AutoForDepot", group="OurRobot")
+@Autonomous(name="AutoForDepot", group="bbit")
 public class AutoForDepot extends LinearOpMode {
 
     /* Declare OpMode members. */
@@ -102,7 +102,7 @@ public class AutoForDepot extends LinearOpMode {
         robot.liftArm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.liftArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.liftArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.liftArm.setTargetPosition(-25000);
+        robot.liftArm.setTargetPosition(19512);
         robot.liftArm.setPower(1);
         while (robot.liftArm.isBusy() && opModeIsActive()) {
             idle();
@@ -266,8 +266,8 @@ public class AutoForDepot extends LinearOpMode {
                 }
                 sleep(250);
 
-                 robot.markerServo.setPosition(1);
-                 sleep(1000);
+            //     robot.markerServo.setPosition(1);
+            //     sleep(1000);
             } else {
 
                 robot.sampleArm.setPosition(1);
@@ -371,8 +371,8 @@ public class AutoForDepot extends LinearOpMode {
                     }
                     sleep(250);
 
-                    robot.markerServo.setPosition(1);
-                    sleep(1000);
+              //     robot.markerServo.setPosition(1);
+              //      sleep(1000);
                 } else {
 
                     robot.sampleArm.setPosition(1);
@@ -459,8 +459,8 @@ public class AutoForDepot extends LinearOpMode {
                     sleep(250);
                     robot.allMotorsStop();
 
-                    robot.markerServo.setPosition(1);
-                    sleep(1000);
+             //       robot.markerServo.setPosition(1);
+             //       sleep(1000);
                 }
 
             }

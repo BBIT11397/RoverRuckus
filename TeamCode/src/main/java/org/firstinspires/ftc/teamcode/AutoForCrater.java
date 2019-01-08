@@ -61,7 +61,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="AutoForCrater", group="OurRobot")
+@Autonomous(name="AutoForCrater", group="bbit")
 public class AutoForCrater extends LinearOpMode {
 
     /* Declare OpMode members. */
@@ -107,7 +107,7 @@ public class AutoForCrater extends LinearOpMode {
         robot.liftArm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.liftArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.liftArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.liftArm.setTargetPosition(-25000);
+        robot.liftArm.setTargetPosition(19512);
         robot.liftArm.setPower(1);
         while (robot.liftArm.isBusy() && opModeIsActive()) {
             idle();
