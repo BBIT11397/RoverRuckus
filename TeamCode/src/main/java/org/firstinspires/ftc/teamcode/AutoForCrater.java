@@ -74,7 +74,7 @@ public class AutoForCrater extends LinearOpMode {
     static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
 
-   public double newColorPosition = .7;
+   public double newColorPosition = .55;
 
  @Override
     public void runOpMode() {
@@ -119,10 +119,10 @@ public class AutoForCrater extends LinearOpMode {
 
         setUpMotors();
         // Set Target and Turn On RUN_TO_POSITION
-        robot.rightFront.setTargetPosition(-600);
-        robot.rightBack.setTargetPosition(600);
-        robot.leftFront.setTargetPosition(600);
-        robot.leftBack.setTargetPosition(-600);
+        robot.rightFront.setTargetPosition(600);
+        robot.rightBack.setTargetPosition(-600);
+        robot.leftFront.setTargetPosition(-600);
+        robot.leftBack.setTargetPosition(600);
 
         //Do strafing left stuff
         robot.rightBack.setPower(1);
@@ -140,10 +140,10 @@ public class AutoForCrater extends LinearOpMode {
         robot.allMotorsStop();
 
         setUpMotors();
-        robot.leftBack.setTargetPosition(2600);
-        robot.leftFront.setTargetPosition(2600);
-        robot.rightFront.setTargetPosition(2600);
-        robot.rightBack.setTargetPosition(2600);
+        robot.leftBack.setTargetPosition(2500);
+        robot.leftFront.setTargetPosition(2500);
+        robot.rightFront.setTargetPosition(2500);
+        robot.rightBack.setTargetPosition(2500);
 
         //Do strafing right stuff
         robot.leftFront.setPower(1);
@@ -161,7 +161,27 @@ public class AutoForCrater extends LinearOpMode {
 
         robot.allMotorsStop();
 
-        robot.sampleArm.setPosition(.7);
+        setUpMotors();
+        robot.rightFront.setTargetPosition(-600);
+        robot.rightBack.setTargetPosition(600);
+        robot.leftFront.setTargetPosition(600);
+        robot.leftBack.setTargetPosition(-600);
+
+        //Do strafing left stuff
+        robot.rightBack.setPower(1);
+        robot.rightFront.setPower(1);
+        robot.leftFront.setPower(1);
+        robot.leftBack.setPower(1);
+
+        while (robot.checkMotorIsBusy() && opModeIsActive()) {
+             telemetry.addLine()
+                 .addData("Task", "reline");
+            idle();
+        }
+        sleep(250);
+        robot.allMotorsStop();
+
+         robot.sampleArm.setPosition(.55);
 
         sleep(150);
 
@@ -175,7 +195,7 @@ public class AutoForCrater extends LinearOpMode {
             telemetry.addLine()
                     .addData("alpha", robot.colorSensor.alpha());
             telemetry.update();
-            newColorPosition = robot.sampleArm.getPosition() - 0.01;
+            newColorPosition = robot.sampleArm.getPosition() + 0.01;
             robot.sampleArm.setPosition(newColorPosition);
             sleep(250);
             idle();
@@ -187,12 +207,12 @@ public class AutoForCrater extends LinearOpMode {
             }
         }
 
-        double lowestWhiteValue = floor + 40;
+        double lowestWhiteValue = floor + 30;
         double currentReading;
         double highestReading = lastReading;
 
         if (foundMineral == true) {
-            robot.sampleArm.setPosition(newColorPosition - 0.04);
+            robot.sampleArm.setPosition(newColorPosition + 0.04);
             sleep(250);
 
             telemetry.addLine()
@@ -211,8 +231,8 @@ public class AutoForCrater extends LinearOpMode {
                         .addData("alpha", robot.colorSensor.alpha());
                 telemetry.update();
 
-                robot.sampleArm.setPosition(1);
-                sleep(250);
+                robot.sampleArm.setPosition(0);
+                sleep(500);
 
                 //strafeLeft Function
                 setUpMotors();
@@ -256,7 +276,7 @@ public class AutoForCrater extends LinearOpMode {
                 sleep(150);
             } else {
 
-                robot.sampleArm.setPosition(1);
+                robot.sampleArm.setPosition(0);
                 sleep(150);
 
                 setUpMotors();
@@ -281,12 +301,12 @@ public class AutoForCrater extends LinearOpMode {
 
                 robot.allMotorsStop();
 
-                robot.sampleArm.setPosition(.7);
+                robot.sampleArm.setPosition(.55);
                 sleep(150);
 
                 boolean foundMineral2 = false;
                 while (robot.colorSensor.alpha() <= mineralvalue && opModeIsActive()) {
-                    newColorPosition = robot.sampleArm.getPosition() - 0.01;
+                    newColorPosition = robot.sampleArm.getPosition() + 0.01;
                     robot.sampleArm.setPosition(newColorPosition);
                     telemetry.addLine()
                             .addData("alpha", robot.colorSensor.alpha());
@@ -299,7 +319,7 @@ public class AutoForCrater extends LinearOpMode {
                         telemetry.addLine()
                                 .addData("alpha", robot.colorSensor.alpha());
                         telemetry.update();
-                        robot.sampleArm.setPosition(newColorPosition - 0.04);
+                        robot.sampleArm.setPosition(newColorPosition + 0.04);
                         sleep(1000);
 
                         currentReading = robot.colorSensor.alpha();
@@ -319,7 +339,7 @@ public class AutoForCrater extends LinearOpMode {
                 }
 
                 if (foundMineral2 == true) {
-                    robot.sampleArm.setPosition(1);
+                    robot.sampleArm.setPosition(0);
                     sleep(500);
 
                     setUpMotors();
@@ -361,7 +381,7 @@ public class AutoForCrater extends LinearOpMode {
                     sleep(150);
                 } else {
 
-                    robot.sampleArm.setPosition(1);
+                    robot.sampleArm.setPosition(0);
                     sleep(500);
                     // strafe to 3rd and final mineral
                     setUpMotors();
@@ -385,7 +405,7 @@ public class AutoForCrater extends LinearOpMode {
                     sleep(150);
                     robot.allMotorsStop();
 
-                    robot.sampleArm.setPosition(1);
+                    robot.sampleArm.setPosition(0);
                     sleep(150);
 
                     setUpMotors();

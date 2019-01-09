@@ -73,7 +73,7 @@ public class AutoForDepot extends LinearOpMode {
     static final double WHEEL_DIAMETER_INCHES = 4.0;     // For figuring circumference
     static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
-    public double newColorPosition = .7;
+    public double newColorPosition = .55;
 
 
     @Override
@@ -113,10 +113,10 @@ public class AutoForDepot extends LinearOpMode {
         robot.liftArm.setPower(0);
 
         setUpMotors();
-        robot.rightFront.setTargetPosition(725);
-        robot.rightBack.setTargetPosition(-725);
-        robot.leftFront.setTargetPosition(-725);
-        robot.leftBack.setTargetPosition(725);
+        robot.rightFront.setTargetPosition(-725);
+        robot.rightBack.setTargetPosition(725);
+        robot.leftFront.setTargetPosition(725);
+        robot.leftBack.setTargetPosition(-725);
 
         //Do strafing left stuff
         robot.rightBack.setPower(.70);
@@ -176,7 +176,7 @@ public class AutoForDepot extends LinearOpMode {
         sleep(250);
         robot.allMotorsStop();
 
-        robot.sampleArm.setPosition(.85);
+        robot.sampleArm.setPosition(.55);
         sleep(500);
 
         double floor = robot.colorSensor.alpha();
@@ -190,7 +190,7 @@ public class AutoForDepot extends LinearOpMode {
             telemetry.addLine()
                     .addData("alpha", robot.colorSensor.alpha());
             telemetry.update();
-            newColorPosition = robot.sampleArm.getPosition() - 0.01;
+            newColorPosition = robot.sampleArm.getPosition() + 0.01;
             robot.sampleArm.setPosition(newColorPosition);
             sleep(250);
             idle();
@@ -202,12 +202,12 @@ public class AutoForDepot extends LinearOpMode {
             }
         }
 
-        double lowestWhiteValue = floor + 40;
+        double lowestWhiteValue = floor + 30;
         double currentReading;
         double highestReading = lastReading;
 
         if (foundMineral == true) {
-            robot.sampleArm.setPosition(newColorPosition - 0.04);
+            robot.sampleArm.setPosition(newColorPosition + 0.04);
             sleep(500);
 
             currentReading = robot.colorSensor.alpha();
@@ -222,7 +222,7 @@ public class AutoForDepot extends LinearOpMode {
                         .addData("alpha", robot.colorSensor.alpha());
                 telemetry.update();
 
-                robot.sampleArm.setPosition(1);
+                robot.sampleArm.setPosition(0);
                 sleep(250);
 
                 setUpMotors();
@@ -266,11 +266,9 @@ public class AutoForDepot extends LinearOpMode {
                 }
                 sleep(250);
 
-            //     robot.markerServo.setPosition(1);
-            //     sleep(1000);
             } else {
 
-                robot.sampleArm.setPosition(1);
+                robot.sampleArm.setPosition(0);
                 sleep(250);
 
                 setUpMotors();
@@ -312,13 +310,13 @@ public class AutoForDepot extends LinearOpMode {
 
                 robot.allMotorsStop();
 
-                robot.sampleArm.setPosition(.85);
+                robot.sampleArm.setPosition(.55);
                 sleep(500);
 
                 boolean foundMineral2 = false;
 
                 while (robot.colorSensor.alpha() <= mineralvalue && opModeIsActive()) {
-                    newColorPosition = robot.sampleArm.getPosition() - 0.01;
+                    newColorPosition = robot.sampleArm.getPosition() + 0.01;
                     robot.sampleArm.setPosition(newColorPosition);
                     sleep(250);
                     idle();
@@ -328,7 +326,7 @@ public class AutoForDepot extends LinearOpMode {
                         telemetry.addLine()
                                 .addData("alpha", robot.colorSensor.alpha());
                         telemetry.update();
-                        robot.sampleArm.setPosition(newColorPosition - 0.04);
+                        robot.sampleArm.setPosition(newColorPosition + 0.04);
                         sleep(500);
 
                         currentReading = robot.colorSensor.alpha();
@@ -349,7 +347,7 @@ public class AutoForDepot extends LinearOpMode {
                 }
 
                 if (foundMineral2 == true) {
-                    robot.sampleArm.setPosition(1);
+                    robot.sampleArm.setPosition(0);
                     sleep(500);
 
                     setUpMotors();
@@ -371,11 +369,9 @@ public class AutoForDepot extends LinearOpMode {
                     }
                     sleep(250);
 
-              //     robot.markerServo.setPosition(1);
-              //      sleep(1000);
                 } else {
 
-                    robot.sampleArm.setPosition(1);
+                    robot.sampleArm.setPosition(0);
                     sleep(500);
                     // strafe to 3rd and final mineral
                     setUpMotors();
@@ -459,8 +455,6 @@ public class AutoForDepot extends LinearOpMode {
                     sleep(250);
                     robot.allMotorsStop();
 
-             //       robot.markerServo.setPosition(1);
-             //       sleep(1000);
                 }
 
             }
