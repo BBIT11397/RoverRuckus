@@ -74,7 +74,7 @@ public class AutoForCrater extends LinearOpMode {
     static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
 
-   public double newColorPosition = .55;
+   public double newColorPosition = .25;
 
  @Override
     public void runOpMode() {
@@ -181,7 +181,7 @@ public class AutoForCrater extends LinearOpMode {
         sleep(250);
         robot.allMotorsStop();
 
-         robot.sampleArm.setPosition(.55);
+         robot.sampleArm.setPosition(.25);
 
         sleep(150);
 
@@ -219,6 +219,9 @@ public class AutoForCrater extends LinearOpMode {
                     .addData("alpha", robot.colorSensor.alpha());
             telemetry.update();
 
+            sleep(250);
+
+
             currentReading = robot.colorSensor.alpha();
 
             if (currentReading > lastReading){
@@ -228,33 +231,11 @@ public class AutoForCrater extends LinearOpMode {
             if (highestReading < lowestWhiteValue) {
                 //gold is found
                 telemetry.addLine()
-                        .addData("alpha", robot.colorSensor.alpha());
+                        .addData("alpha", highestReading);
                 telemetry.update();
 
                 robot.sampleArm.setPosition(0);
                 sleep(500);
-
-                //strafeLeft Function
-                setUpMotors();
-                robot.rightFront.setTargetPosition(400);
-                robot.rightBack.setTargetPosition(-400);
-                robot.leftFront.setTargetPosition(-400);
-                robot.leftBack.setTargetPosition(400);
-
-                //Do strafing left stuff
-                robot.rightBack.setPower(1);
-                robot.rightFront.setPower(1);
-                robot.leftFront.setPower(1);
-                robot.leftBack.setPower(1);
-
-                while (robot.checkMotorIsBusy() && opModeIsActive()) {
-                    telemetry.addLine()
-                            .addData("Task", "move out of way of other mineral");
-                    ;
-                    idle();
-                }
-                sleep(150);
-                robot.allMotorsStop();
 
                 setUpMotors();
                 robot.leftBack.setTargetPosition(2500);
@@ -301,15 +282,17 @@ public class AutoForCrater extends LinearOpMode {
 
                 robot.allMotorsStop();
 
-                robot.sampleArm.setPosition(.55);
-                sleep(150);
+                robot.sampleArm.setPosition(.25);
+                sleep(250);
 
                 boolean foundMineral2 = false;
+                floor = robot.colorSensor.alpha();
+                mineralvalue = floor + 6;
                 while (robot.colorSensor.alpha() <= mineralvalue && opModeIsActive()) {
                     newColorPosition = robot.sampleArm.getPosition() + 0.01;
                     robot.sampleArm.setPosition(newColorPosition);
                     telemetry.addLine()
-                            .addData("alpha", robot.colorSensor.alpha());
+                            .addData("alpha", floor);
                     telemetry.update();
                     sleep(250);
                     idle();
@@ -319,7 +302,7 @@ public class AutoForCrater extends LinearOpMode {
                         telemetry.addLine()
                                 .addData("alpha", robot.colorSensor.alpha());
                         telemetry.update();
-                        robot.sampleArm.setPosition(newColorPosition + 0.04);
+                        robot.sampleArm.setPosition(newColorPosition + 0.06);
                         sleep(1000);
 
                         currentReading = robot.colorSensor.alpha();
@@ -327,11 +310,12 @@ public class AutoForCrater extends LinearOpMode {
                         if(currentReading > lastReading){
                             highestReading = currentReading;
                         }
+                        telemetry.addLine()
+                                .addData("alpha", highestReading);
+                        telemetry.update();
+                        sleep(1000);
+
                         if(highestReading < lowestWhiteValue) {
-                            telemetry.addLine()
-                                    .addData("alpha", robot.colorSensor.alpha());
-                            telemetry.update();
-                            sleep(250);
                             foundMineral2 = true;
                             continue;
                         }
@@ -339,6 +323,7 @@ public class AutoForCrater extends LinearOpMode {
                 }
 
                 if (foundMineral2 == true) {
+
                     robot.sampleArm.setPosition(0);
                     sleep(500);
 
@@ -382,13 +367,13 @@ public class AutoForCrater extends LinearOpMode {
                 } else {
 
                     robot.sampleArm.setPosition(0);
-                    sleep(500);
+                    sleep(250);
                     // strafe to 3rd and final mineral
                     setUpMotors();
-                    robot.rightFront.setTargetPosition(4500);
-                    robot.rightBack.setTargetPosition(-4500);
-                    robot.leftFront.setTargetPosition(-4500);
-                    robot.leftBack.setTargetPosition(4500);
+                    robot.rightFront.setTargetPosition(4000);
+                    robot.rightBack.setTargetPosition(-4000);
+                    robot.leftFront.setTargetPosition(-4000);
+                    robot.leftBack.setTargetPosition(4000);
 
                     //Do strafing left stuff
                     robot.rightBack.setPower(1);

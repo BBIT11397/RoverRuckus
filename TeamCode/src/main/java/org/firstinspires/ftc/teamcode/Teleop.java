@@ -145,7 +145,7 @@ public class Teleop extends LinearOpMode {
             }
 
             if (gamepad1.b) {
-                robot.sampleArm.setPosition(0);
+                robot.sampleArm.setPosition(.1);
             }
 
             telemetry.addLine()
