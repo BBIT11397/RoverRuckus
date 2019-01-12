@@ -207,7 +207,7 @@ public class AutoForCrater extends LinearOpMode {
             }
         }
 
-        double lowestWhiteValue = floor + 30;
+        double lowestWhiteValue = floor + 25;
         double currentReading;
         double highestReading = lastReading;
 
@@ -216,7 +216,7 @@ public class AutoForCrater extends LinearOpMode {
             sleep(250);
 
             telemetry.addLine()
-                    .addData("alpha", robot.colorSensor.alpha());
+                    .addData("alpha", highestReading);
             telemetry.update();
 
             sleep(250);
@@ -228,12 +228,12 @@ public class AutoForCrater extends LinearOpMode {
                 highestReading = currentReading;
             }
 
+            telemetry.addLine()
+                    .addData("alpha", highestReading);
+            telemetry.update();
+
             if (highestReading < lowestWhiteValue) {
                 //gold is found
-                telemetry.addLine()
-                        .addData("alpha", highestReading);
-                telemetry.update();
-
                 robot.sampleArm.setPosition(0);
                 sleep(500);
 
