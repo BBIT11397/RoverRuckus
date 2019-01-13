@@ -136,9 +136,8 @@ public class AutoForCrater extends LinearOpMode {
             ;
             idle();
         }
-        sleep(150);
-        robot.allMotorsStop();
-
+        sleep(250);
+        allMotorsStop2();
         setUpMotors();
         robot.leftBack.setTargetPosition(2500);
         robot.leftFront.setTargetPosition(2500);
@@ -157,9 +156,9 @@ public class AutoForCrater extends LinearOpMode {
             telemetry.update();
             idle();
         }
-        sleep(150);
+        sleep(250);
 
-        robot.allMotorsStop();
+        allMotorsStop2();
 
         setUpMotors();
         robot.rightFront.setTargetPosition(-600);
@@ -179,11 +178,12 @@ public class AutoForCrater extends LinearOpMode {
             idle();
         }
         sleep(250);
-        robot.allMotorsStop();
+        allMotorsStop2();
 
-         robot.sampleArm.setPosition(.25);
 
-        sleep(150);
+        robot.sampleArm.setPosition(.25);
+
+        sleep(250);
 
         boolean foundMineral = false;
 
@@ -280,7 +280,7 @@ public class AutoForCrater extends LinearOpMode {
                 }
                 sleep(150);
 
-                robot.allMotorsStop();
+                allMotorsStop2();
 
                 robot.sampleArm.setPosition(.25);
                 sleep(250);
@@ -388,7 +388,7 @@ public class AutoForCrater extends LinearOpMode {
                         idle();
                     }
                     sleep(150);
-                    robot.allMotorsStop();
+                    allMotorsStop2();
 
                     robot.sampleArm.setPosition(0);
                     sleep(150);
@@ -411,7 +411,7 @@ public class AutoForCrater extends LinearOpMode {
                         idle();
                     }
                     sleep(150);
-                    robot.allMotorsStop();
+                    allMotorsStop2();
                 }
 
             }
@@ -441,4 +441,12 @@ public class AutoForCrater extends LinearOpMode {
         robot.leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
+
+     void allMotorsStop2 (){
+        robot.leftFront.setPower(0);
+        robot.leftBack.setPower(0);
+        robot.rightBack.setPower(0);
+        robot.rightFront.setPower(0);
+    }
+
 }
