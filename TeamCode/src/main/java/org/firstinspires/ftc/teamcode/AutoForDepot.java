@@ -74,7 +74,7 @@ public class AutoForDepot extends LinearOpMode {
     static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
     public double newColorPosition = .55;
-    double markerOff = 0.8;
+    double markerOff = 1;
 
 
     @Override
@@ -131,7 +131,7 @@ public class AutoForDepot extends LinearOpMode {
             ;
             idle();
         }
-        allMotorsStop2();
+        robot.allMotorsStop();
         setUpMotors();
         robot.rightFront.setTargetPosition(-200);
         robot.rightBack.setTargetPosition(-200);
@@ -150,7 +150,7 @@ public class AutoForDepot extends LinearOpMode {
             ;
             idle();
         }
-        allMotorsStop2();
+        robot.allMotorsStop();
         setUpMotors();
         robot.rightFront.setTargetPosition(-600);
         robot.rightBack.setTargetPosition(600);
@@ -168,7 +168,7 @@ public class AutoForDepot extends LinearOpMode {
                     .addData("Task", "Strafe to Unhook");
             idle();
         }
-        allMotorsStop2();
+        robot.allMotorsStop();
         setUpMotors();
         robot.leftBack.setTargetPosition(2400);
         robot.leftFront.setTargetPosition(2400);
@@ -189,7 +189,7 @@ public class AutoForDepot extends LinearOpMode {
         }
         sleep(150);
 
-        allMotorsStop2();
+        robot.allMotorsStop();
 
         setUpMotors();
         robot.rightFront.setTargetPosition(650);
@@ -210,7 +210,7 @@ public class AutoForDepot extends LinearOpMode {
             idle();
         }
         sleep(250);
-        allMotorsStop2();
+        robot.allMotorsStop();
         robot.sampleArm.setPosition(.35);
         sleep(150);
 
@@ -296,10 +296,10 @@ public class AutoForDepot extends LinearOpMode {
                 robot.rightBack.setTargetPosition(2000);
 
                 //Do strafing right stuff
-                robot.leftFront.setPower(1);
-                robot.leftBack.setPower(1);
-                robot.rightBack.setPower(1);
-                robot.rightFront.setPower(1);
+                robot.leftFront.setPower(.5);
+                robot.leftBack.setPower(.5);
+                robot.rightBack.setPower(.5);
+                robot.rightFront.setPower(.5);
 
                 while (robot.checkMotorIsBusy() && opModeIsActive()) {
                     telemetry.addLine()
@@ -307,28 +307,9 @@ public class AutoForDepot extends LinearOpMode {
                     telemetry.update();
                     idle();
                 }
-                allMotorsStop2();
+                robot.allMotorsStop();
 
-                setUpMotors();
-                robot.rightFront.setTargetPosition(-125);
-                robot.rightBack.setTargetPosition(-125);
-                robot.leftFront.setTargetPosition(-125);
-                robot.leftBack.setTargetPosition(-125);
-
-                //Do strafing left stuff
-                robot.rightBack.setPower(1);
-                robot.rightFront.setPower(1);
-                robot.leftFront.setPower(1);
-                robot.leftBack.setPower(1);
-
-                while (robot.checkMotorIsBusy() && opModeIsActive()) {
-                    telemetry.addLine()
-                            .addData("Task", " Pivot to Unhook");
-                    ;
-                    idle();
-                }
-                allMotorsStop2();
-                robot.sampleArm.setPosition(.35);
+                robot.sampleArm.setPosition(.25);
                 sleep(250);
 
                 boolean foundMineral2 = false;
@@ -393,10 +374,10 @@ public class AutoForDepot extends LinearOpMode {
                     sleep(150);
 
                     setUpMotors();
-                    robot.leftBack.setTargetPosition(300);
-                    robot.leftFront.setTargetPosition(-300);
-                    robot.rightFront.setTargetPosition(300);
-                    robot.rightBack.setTargetPosition(-300);
+                    robot.leftBack.setTargetPosition(600);
+                    robot.leftFront.setTargetPosition(600);
+                    robot.rightFront.setTargetPosition(-600);
+                    robot.rightBack.setTargetPosition(-600);
 
                     robot.leftFront.setPower(1);
                     robot.leftBack.setPower(1);
@@ -413,10 +394,10 @@ public class AutoForDepot extends LinearOpMode {
 
 
                     setUpMotors();
-                    robot.leftBack.setTargetPosition(300);
-                    robot.leftFront.setTargetPosition(300);
-                    robot.rightFront.setTargetPosition(300);
-                    robot.rightBack.setTargetPosition(300);
+                    robot.leftBack.setTargetPosition(1000);
+                    robot.leftFront.setTargetPosition(1000);
+                    robot.rightFront.setTargetPosition(1000);
+                    robot.rightBack.setTargetPosition(1000);
 
                     robot.leftFront.setPower(1);
                     robot.leftBack.setPower(1);
@@ -458,7 +439,7 @@ public class AutoForDepot extends LinearOpMode {
                         idle();
                     }
                     sleep(250);
-                    allMotorsStop2();
+                    robot.allMotorsStop();
                     robot.sampleArm.setPosition(0);
                     sleep(150);
 
@@ -480,7 +461,7 @@ public class AutoForDepot extends LinearOpMode {
                         idle();
                     }
                     sleep(250);
-                    allMotorsStop2();
+                    robot.allMotorsStop();
                     setUpMotors();
                     robot.leftBack.setTargetPosition(-850);
                     robot.leftFront.setTargetPosition(-850);
@@ -499,7 +480,7 @@ public class AutoForDepot extends LinearOpMode {
                         idle();
                     }
                     sleep(250);
-                    allMotorsStop2();
+                    robot.allMotorsStop();
                     setUpMotors();
                     robot.leftBack.setTargetPosition(1500);
                     robot.leftFront.setTargetPosition(1500);
@@ -522,7 +503,7 @@ public class AutoForDepot extends LinearOpMode {
                     robot.markerServo.setPosition(markerOff);
                     sleep(250);
 
-                    allMotorsStop2();
+                    robot.allMotorsStop();
                 }
 
             }
@@ -532,7 +513,7 @@ public class AutoForDepot extends LinearOpMode {
         robot.leftBack.setPower(0);
         robot.rightBack.setPower(0);
         robot.rightFront.setPower(0);
-        allMotorsStop2();
+        robot.allMotorsStop();
 
         telemetry.addLine()
                 .addData("path", "complete");
@@ -554,13 +535,6 @@ public class AutoForDepot extends LinearOpMode {
         robot.rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    }
-
-     void allMotorsStop2 (){
-        robot.leftFront.setPower(0);
-        robot.leftBack.setPower(0);
-        robot.rightBack.setPower(0);
-        robot.rightFront.setPower(0);
     }
 
 }

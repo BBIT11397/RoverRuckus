@@ -137,7 +137,7 @@ public class AutoForCrater extends LinearOpMode {
             idle();
         }
         sleep(250);
-        allMotorsStop2();
+        robot.allMotorsStop();
         setUpMotors();
         robot.leftBack.setTargetPosition(2500);
         robot.leftFront.setTargetPosition(2500);
@@ -158,7 +158,7 @@ public class AutoForCrater extends LinearOpMode {
         }
         sleep(250);
 
-        allMotorsStop2();
+        robot.allMotorsStop();
 
         setUpMotors();
         robot.rightFront.setTargetPosition(-600);
@@ -178,8 +178,7 @@ public class AutoForCrater extends LinearOpMode {
             idle();
         }
         sleep(250);
-        allMotorsStop2();
-
+        robot.allMotorsStop();
 
         robot.sampleArm.setPosition(.25);
 
@@ -280,7 +279,7 @@ public class AutoForCrater extends LinearOpMode {
                 }
                 sleep(150);
 
-                allMotorsStop2();
+                robot.allMotorsStop();
 
                 robot.sampleArm.setPosition(.25);
                 sleep(250);
@@ -388,7 +387,7 @@ public class AutoForCrater extends LinearOpMode {
                         idle();
                     }
                     sleep(150);
-                    allMotorsStop2();
+                    robot.allMotorsStop();
 
                     robot.sampleArm.setPosition(0);
                     sleep(150);
@@ -411,7 +410,7 @@ public class AutoForCrater extends LinearOpMode {
                         idle();
                     }
                     sleep(150);
-                    allMotorsStop2();
+                    robot.allMotorsStop();
                 }
 
             }
@@ -442,11 +441,4 @@ public class AutoForCrater extends LinearOpMode {
         robot.leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
-     void allMotorsStop2 (){
-        robot.leftFront.setPower(0);
-        robot.leftBack.setPower(0);
-        robot.rightBack.setPower(0);
-        robot.rightFront.setPower(0);
-    }
-
-}
+ }
